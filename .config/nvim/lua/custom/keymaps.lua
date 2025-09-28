@@ -50,6 +50,42 @@ vim.keymap.set('n', 'H', 'gT', {
     noremap = true,
     desc = 'Go to prev tab'
 })
+
+-- 使用 Ctrl+h/l 快速切换缓冲区（类似浏览器标签页）
+vim.keymap.set('n', '<C-h>', '<cmd>bprev<cr>', {
+    desc = '上一个缓冲区'
+})
+vim.keymap.set('n', '<C-l>', '<cmd>bnext<cr>', {
+    desc = '下一个缓冲区'
+})
+
+-- 缓冲区导航和管理
+vim.keymap.set('n', '<leader>bf', function()
+    -- 跳转到第一个缓冲区
+    local buffers = vim.tbl_filter(function(bufnr)
+        return vim.api.nvim_get_option_value('buflisted', { buf = bufnr })
+    end, vim.api.nvim_list_bufs())
+    
+    if buffers[1] then
+        vim.api.nvim_set_current_buf(buffers[1])
+    end
+end, {
+    desc = '跳转到第一个缓冲区'
+})
+
+vim.keymap.set('n', '<leader>bl', function()
+    -- 跳转到最后一个缓冲区
+    local buffers = vim.tbl_filter(function(bufnr)
+        return vim.api.nvim_get_option_value('buflisted', { buf = bufnr })
+    end, vim.api.nvim_list_bufs())
+    
+    if buffers[#buffers] then
+        vim.api.nvim_set_current_buf(buffers[#buffers])
+    end
+end, {
+    desc = '跳转到最后一个缓冲区'
+})
+
 vim.keymap.set('n', '+', '<C-w>|<C-w>_', {
     desc = 'Maximize nvim pane'
 })
