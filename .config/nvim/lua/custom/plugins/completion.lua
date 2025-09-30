@@ -1,95 +1,180 @@
 return {
     'saghen/blink.cmp',
-    -- 可选依赖，用于构建二进制文件
-    dependencies = 'rafamadriz/friendly-snippets',
-    -- 使用发布版本而不是主分支
-    version = '1.*',
-    -- 懒加载配置
+    -- 依赖项：代码片段支持
+    dependencies = {
+        'rafamadriz/friendly-snippets',
+        {
+            'L3MON4D3/LuaSnip',
+            version = 'v2.*',
+            config = function()
+                -- 加载 LuaSnip 代码片段
+                require('luasnip.loaders.from_lua').lazy_load()
+                -- 加载自定义 Lua 代码片段
+                require('luasnip.loaders.from_lua').lazy_load({
+                    paths = { vim.fn.stdpath('config') .. '/snippets' }
+                })
+                -- 加载 VSCode 格式代码片段
+                require('luasnip.loaders.from_vscode').lazy_load()
+                -- 加载自定义 VSCode 格式代码片段
+                require('luasnip.loaders.from_vscode').lazy_load({
+                    paths = { vim.fn.stdpath('config') .. '/snippets' }
+                })
+            end
+        }
+    },
+    -- 使用最新稳定版本
+    version = '*',
+    -- 懒加载：进入插入模式时加载
     event = 'InsertEnter',
 
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
     opts = {
-        -- 'default' 用于默认预设
-        -- 'minimal' 用于最小预设
-        -- 'super-tab' 用于super-tab预设
-        keymap = {
-            preset = 'default'
-        },
-
+        -- 外观配置
         appearance = {
-            -- 设置为 'mono' 用于 Nerd Font Mono 或 'normal' 用于 Nerd Font
-            -- 调整为适合你的字体，大多数用户应该使用 'normal'
+            -- 使用 nvim-cmp 的高亮组作为后备（主题兼容性）
+            use_nvim_cmp_as_default = true,
+            -- Nerd Font 变体：'mono' 用于等宽字体，'normal' 用于普通字体
             nerd_font_variant = 'mono'
         },
 
-        -- 默认补全源列表
+        -- 补全源配置
         sources = {
-            default = {'lsp', 'path', 'snippets', 'buffer'},
-            -- 代码片段高优先级设置
+            -- 默认启用的补全源（按优先级排序）
+            default = { 'lsp', 'path', 'snippets', 'buffer' },
+            -- 各补全源的详细配置
             providers = {
+                -- LSP 补全：最高优先级
+                lsp = {
+                    score_offset = 100,
+                    -- 启用所有 LSP 功能
+                    fallbacks = { 'buffer' }
+                },
+                -- 路径补全：高优先级
+                path = {
+                    score_offset = 50,
+                    -- 路径补全的触发字符
+                    opts = {
+                        trailing_slash = false,
+                        label_trailing_slash = true
+                    }
+                },
+                -- 代码片段：中等优先级
                 snippets = {
-                    score_offset = 1000
+                    score_offset = 30,
+                    -- 代码片段的最小关键词长度
+                    min_keyword_length = 2
+                },
+                -- 缓冲区补全：最低优先级
+                buffer = {
+                    score_offset = 10,
+                    -- 缓冲区补全的最小关键词长度
+                    min_keyword_length = 3,
+                    -- 最大补全项数量
+                    max_items = 5
                 }
             }
         },
 
         -- 命令行补全配置
         cmdline = {
-            sources = {}
+            -- 启用命令行补全
+            enabled = true,
+            -- 命令行补全源
+            sources = {
+                default = { 'cmdline', 'path' }
+            },
+            -- 命令行按键映射
+            keymap = {
+                preset = 'default',
+                ['<CR>'] = { 'select_and_accept', 'fallback' }
+            }
         },
 
-        -- 实验性签名帮助支持
+        -- 签名帮助配置
         signature = {
-            enabled = true
+            enabled = true,
+            -- 签名帮助窗口配置
+            window = {
+                border = 'rounded',
+                scrollbar = false
+            }
         },
 
+        -- 补全行为配置
         completion = {
-            -- 'prefix' 用于传统补全匹配
-            -- 'fuzzy' 用于模糊匹配
+            -- 关键词匹配范围：'prefix' 匹配前缀，'full' 匹配整个单词
             keyword = {
-                range = 'prefix'
+                range = 'full'
             },
 
             -- 触发配置
             trigger = {
-                -- 当为true时，将在每次按键时显示补全菜单
-                -- 当为false时，只在触发字符或手动触发时显示
+                -- 输入时自动显示补全
                 show_on_keyword = true,
-                -- 当为true时，将在插入模式进入时显示补全菜单
-                show_on_insert_on_trigger_character = true
+                -- 输入触发字符时显示补全
+                show_on_trigger_character = true,
+                -- 触发字符列表
+                signature_trigger_characters = { '(', ',', ' ' }
+            },
+
+            -- 补全列表配置
+            list = {
+                -- 选择行为
+                selection = {
+                    -- 不预选第一项
+                    preselect = false,
+                    -- 选中时不自动插入
+                    auto_insert = false
+                },
+                -- 循环选择配置
+                cycle = {
+                    from_bottom = true,
+                    from_top = true
+                }
             },
 
             -- 补全菜单配置
             menu = {
-                -- 控制补全菜单何时自动显示
+                -- 自动显示补全菜单
                 auto_show = true,
-
-                -- 绘制配置
+                -- 菜单尺寸
+                min_width = 15,
+                max_height = 10,
+                -- 菜单边框
+                border = 'rounded',
+                -- 菜单绘制配置
                 draw = {
-                    -- 对齐补全菜单列
-                    align_to = 'label', -- 或 'none' 禁用，或 'cursor' 对齐到光标
-                    -- 左侧填充，用于图标
+                    -- 对齐方式
+                    align_to = 'label',
+                    -- 左侧填充
                     padding = 1,
-                    -- 间隙配置
+                    -- 列间距
                     gap = 1,
-                    -- 组件配置
-                    columns = {{"kind_icon"}, {
-                        "label",
-                        "label_description",
-                        gap = 1
-                    }}
+                    -- 列配置：图标 + 标签 + 描述
+                    columns = {
+                        { 'kind_icon' },
+                        { 'label', 'label_description', gap = 1 }
+                    }
                 }
             },
 
             -- 文档窗口配置
             documentation = {
-                -- 控制文档窗口何时自动显示
+                -- 自动显示文档
                 auto_show = true,
-                auto_show_delay_ms = 200,
-                -- 更新延迟
-                update_delay_ms = 50
+                -- 显示延迟（毫秒）
+                auto_show_delay_ms = 100,
+                -- 更新延迟（毫秒）
+                update_delay_ms = 50,
+                -- 文档窗口样式
+                window = {
+                    border = 'rounded',
+                    scrollbar = true
+                }
             },
 
-            -- 实验性ghost_text支持
+            -- 幽灵文本配置（禁用以避免干扰）
             ghost_text = {
                 enabled = false
             }
@@ -99,23 +184,42 @@ return {
         keymap = {
             preset = 'default',
             -- 自定义按键映射
-            ['<C-space>'] = {'show', 'show_documentation', 'hide_documentation'},
-            ['<C-e>'] = {'hide'},
-            ['<C-y>'] = {'select_and_accept'},
+            ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+            ['<C-e>'] = { 'hide', 'fallback' },
+            ['<C-y>'] = { 'select_and_accept' },
 
-            ['<C-p>'] = {'select_prev', 'fallback'},
-            ['<C-n>'] = {'select_next', 'fallback'},
+            -- 上下选择
+            ['<C-p>'] = { 'select_prev', 'fallback' },
+            ['<C-n>'] = { 'select_next', 'fallback' },
+            ['<Up>'] = { 'select_prev', 'fallback' },
+            ['<Down>'] = { 'select_next', 'fallback' },
 
-            ['<C-b>'] = {'scroll_documentation_up', 'fallback'},
-            ['<C-f>'] = {'scroll_documentation_down', 'fallback'},
+            -- 文档滚动
+            ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
+            ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
 
-            ['<Tab>'] = {'snippet_forward', 'select_next', 'fallback'},
-            ['<S-Tab>'] = {'snippet_backward', 'select_prev', 'fallback'},
+            -- Tab 键行为：优先处理代码片段，然后是补全选择
+            ['<Tab>'] = { 'snippet_forward', 'select_next', 'fallback' },
+            ['<S-Tab>'] = { 'snippet_backward', 'select_prev', 'fallback' },
 
-            ['<CR>'] = {'accept', 'fallback'}
+            -- 回车键：接受选中项
+            ['<CR>'] = { 'accept', 'fallback' }
+        },
+
+        -- 文件类型特定配置
+        enabled = function()
+            -- 在特定缓冲区类型中禁用
+            return vim.bo.buftype ~= 'prompt' 
+                and vim.bo.buftype ~= 'nofile'
+                and vim.b.completion ~= false
+        end,
+
+        -- 代码片段配置
+        snippets = {
+            preset = 'luasnip'
         }
     },
 
-    -- 允许覆盖默认配置
-    opts_extend = {"sources.default"}
+    -- 扩展默认源配置
+    opts_extend = { 'sources.default' }
 }
