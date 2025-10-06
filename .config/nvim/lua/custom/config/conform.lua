@@ -10,31 +10,29 @@ require('conform').setup {
         }
     end,
     formatters_by_ft = {
-        lua = {'stylua'},
-        cpp = {'clang-format'},
-        python = {'yapf', 'isort'},
-        sh = {'shfmt'},
-        snakemake = {'snakefmt'},
-        markdown = {'prettierd', 'cbfmt'},
-        typst = {'typstyle'},
-        nix = {'nixfmt'},
-        json = {'prettierd'},
-        toml = {'taplo'},
-        tex = {'tex-fmt'},
-        go = {'gofmt', 'goimports'}
+        lua = { 'stylua' },
+        cpp = { 'clang-format' },
+        python = { 'ruff', 'isort' },
+        snakemake = { 'snakefmt' },
+        markdown = { 'prettierd', 'cbfmt' },
+        typst = { 'typstyle' },
+        nix = { 'nixfmt' },
+        json = { 'prettierd' },
+        toml = { 'taplo' },
+        go = { 'gofmt', 'goimports' }
     },
     formatters = {
         cbfmt = {
             command = 'cbfmt',
-            args = {'-w', '--config', vim.fn.expand '~' .. '/.config/cbfmt.toml', '$FILENAME'}
+            args = { '-w', '--config', vim.fn.expand '~' .. '/.config/cbfmt.toml', '$FILENAME' }
         },
         taplo = {
             command = 'taplo',
-            args = {'fmt', '--option', 'indent_tables=false', '-'}
+            args = { 'fmt', '--option', 'indent_tables=false', '-' }
         },
         ruff_fix = {
             command = 'ruff',
-            args = {'check', '--select', 'I', '--fix', '--stdin-filename', '$FILENAME', '-'},
+            args = { 'check', '--select', 'I', '--fix', '--stdin-filename', '$FILENAME', '-' },
             stdin = true
         }
     }

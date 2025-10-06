@@ -5,7 +5,7 @@ return {
         'rafamadriz/friendly-snippets',
         {
             'L3MON4D3/LuaSnip',
-            version = 'v2.*',
+            version = '*',
             config = function()
                 -- 加载 LuaSnip 代码片段
                 require('luasnip.loaders.from_lua').lazy_load()
@@ -63,15 +63,15 @@ return {
                 snippets = {
                     score_offset = 30,
                     -- 代码片段的最小关键词长度
-                    min_keyword_length = 2
+                    min_keyword_length = 1
                 },
                 -- 缓冲区补全：最低优先级
                 buffer = {
                     score_offset = 10,
                     -- 缓冲区补全的最小关键词长度
-                    min_keyword_length = 3,
+                    min_keyword_length = 1,
                     -- 最大补全项数量
-                    max_items = 5
+                    max_items = 10
                 }
             }
         },
@@ -94,6 +94,16 @@ return {
         -- 签名帮助配置
         signature = {
             enabled = true,
+            -- 触发配置
+            trigger = {
+                -- 自动显示签名帮助
+                enabled = true,
+                -- 输入触发字符时显示签名帮助
+                show_on_trigger_character = true,
+                -- 触发字符列表
+                blocked_trigger_characters = {},
+                blocked_retrigger_characters = {}
+            },
             -- 签名帮助窗口配置
             window = {
                 border = 'rounded',
@@ -113,9 +123,7 @@ return {
                 -- 输入时自动显示补全
                 show_on_keyword = true,
                 -- 输入触发字符时显示补全
-                show_on_trigger_character = true,
-                -- 触发字符列表
-                signature_trigger_characters = { '(', ',', ' ' }
+                show_on_trigger_character = true
             },
 
             -- 补全列表配置
@@ -154,7 +162,7 @@ return {
                     -- 列配置：图标 + 标签 + 描述
                     columns = {
                         { 'kind_icon' },
-                        { 'label', 'label_description', gap = 1 }
+                        { 'label',    'label_description', gap = 1 }
                     }
                 }
             },
@@ -198,9 +206,9 @@ return {
             ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
             ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
 
-            -- Tab 键行为：优先处理代码片段，然后是补全选择
-            ['<Tab>'] = { 'snippet_forward', 'select_next', 'fallback' },
-            ['<S-Tab>'] = { 'snippet_backward', 'select_prev', 'fallback' },
+            -- Tab 键行为:补全选择
+            ['<Tab>'] = { 'select_next', 'fallback' },
+            ['<S-Tab>'] = { 'select_prev', 'fallback' },
 
             -- 回车键：接受选中项
             ['<CR>'] = { 'accept', 'fallback' }
@@ -209,7 +217,7 @@ return {
         -- 文件类型特定配置
         enabled = function()
             -- 在特定缓冲区类型中禁用
-            return vim.bo.buftype ~= 'prompt' 
+            return vim.bo.buftype ~= 'prompt'
                 and vim.bo.buftype ~= 'nofile'
                 and vim.b.completion ~= false
         end,
