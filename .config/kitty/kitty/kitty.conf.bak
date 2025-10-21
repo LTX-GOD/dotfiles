@@ -1,0 +1,24 @@
+# BEGIN_KITTY_THEME
+# Catppuccin-Mocha
+include dark-theme.auto.conf
+# END_KITTY_THEME
+
+# font
+font_size 12
+font_family          Monaspace Radon
+disable_ligatures never
+
+# window
+hide_window_decorations        titlebar-only
+window_padding_width           15
+background_opacity             0.8
+background_blur                64
+remember_window_size           yes
+
+# tab bar
+tab_bar_edge                top
+tab_bar_style               powerline
+tab_powerline_style         slanted
+
+# general key mapping
+macos_option_as_alt yes 
