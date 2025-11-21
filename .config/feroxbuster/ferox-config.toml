@@ -1,0 +1,10 @@
+wordlist = "/Users/zsm/CTF/tool/kali_word/wordlists/rockyou.txt"
+extensions = ["php", "html", "txt", "js", "json", "bak", "zip", "old", "sql"]
+threads = 50
+recursion = true
+depth = 4
+filter_status = [401, 404, 400, 403, 429]
+insecure = true
+collect_extensions = true
+random_agent = true
+

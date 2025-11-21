@@ -19,7 +19,12 @@ return {
         -- 设置 mason-lspconfig，它会连接 mason 和 lspconfig
         require('mason-lspconfig').setup {
             -- 确保这些服务器被安装。您可以在这里添加更多服务器。
-            ensure_installed = { 'ruff', 'omnisharp', 'rust_analyzer', 'marksman', 'intelephense' },
+            ensure_installed = { 
+                'ruff', 
+                'rust_analyzer', 
+                'marksman', 
+                'intelephense',
+            },
             handlers = { function(server_name)
                 -- 尝试加载您在 lsp/ 目录下的自定义配置
                 local custom_opts_path = 'lsp.' .. server_name

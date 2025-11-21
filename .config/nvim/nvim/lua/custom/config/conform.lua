@@ -18,7 +18,7 @@ require('conform').setup {
         nix = { 'nixfmt' },
         json = { 'prettierd' },
         toml = { 'taplo' },
-        go = { 'gofmt', 'goimports' }
+        go = { 'gofmt', 'goimports' },
     },
     formatters = {
         
