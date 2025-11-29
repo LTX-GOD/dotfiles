@@ -1,6 +1,6 @@
-return {{
+return { {
     'MeanderingProgrammer/render-markdown.nvim',
-    ft = {'markdown', 'Avante'},
+    ft = { 'markdown', 'Avante' },
     config = function()
         require 'custom.config.render-markdown'
     end
@@ -12,14 +12,14 @@ return {{
         end, {
             desc = 'Switch strings'
         })
-        vim.g.switch_custom_definitions = {{'> [!TODO]', '> [!WIP]', '> [!DONE]', '> [!FAIL]'}}
+        vim.g.switch_custom_definitions = { { '> [!TODO]', '> [!WIP]', '> [!DONE]', '> [!FAIL]' } }
     end
 }, {
     'bullets-vim/bullets.vim',
-    ft = {'markdown'}
+    ft = { 'markdown' }
 }, {
     'HakonHarnes/img-clip.nvim',
-    ft = {'tex', 'markdown', 'typst'},
+    ft = { 'tex', 'markdown', 'typst' },
     opts = {
         default = {
             dir_path = './attachments',
@@ -55,9 +55,9 @@ return {{
             }
         }
     },
-    keys = {{
+    keys = { {
         '<leader>P',
         '<cmd>PasteImage<cr>',
         desc = 'Paste image from system clipboard'
-    }}
-}}
+    } }
+} }

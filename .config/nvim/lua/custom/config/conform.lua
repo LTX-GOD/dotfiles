@@ -10,7 +10,6 @@ require('conform').setup {
         }
     end,
     formatters_by_ft = {
-        lua = { 'stylua' },
         cpp = { 'clang-format' },
         python = { 'ruff', 'isort' },
         snakemake = { 'snakefmt' },
@@ -19,13 +18,10 @@ require('conform').setup {
         nix = { 'nixfmt' },
         json = { 'prettierd' },
         toml = { 'taplo' },
-        go = { 'gofmt', 'goimports' }
+        go = { 'gofmt', 'goimports' },
     },
     formatters = {
-        cbfmt = {
-            command = 'cbfmt',
-            args = { '-w', '--config', vim.fn.expand '~' .. '/.config/cbfmt.toml', '$FILENAME' }
-        },
+        
         taplo = {
             command = 'taplo',
             args = { 'fmt', '--option', 'indent_tables=false', '-' }

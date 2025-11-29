@@ -22,7 +22,7 @@ return {
           enabled = true,
           -- style = "nvchad",
         },
-        nvimtree = false,
+        nvimtree = true,
         neotree = true,
         which_key = true,
         treesitter = true,

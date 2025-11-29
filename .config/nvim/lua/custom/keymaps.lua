@@ -184,3 +184,7 @@ end, {
 vim.keymap.set('n', '<leader>mt', '<cmd>close<cr>', {
     desc = 'Close terminal'
 })
+
+vim.keymap.set({'n','i'}, '<A-Left>', '<Esc>^i', {desc='行首'})
+vim.keymap.set({'n','i'}, '<A-Right>', '<Esc>$i', {desc='行尾'})
+

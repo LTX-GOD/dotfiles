@@ -1,4 +1,3 @@
--- Python文件类型配置，只使用ruff LSP
 vim.lsp.enable 'ruff'
 
 -- 设置Python相关的选项

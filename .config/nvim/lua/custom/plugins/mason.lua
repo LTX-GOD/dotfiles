@@ -19,7 +19,11 @@ return {
         -- 设置 mason-lspconfig，它会连接 mason 和 lspconfig
         require('mason-lspconfig').setup {
             -- 确保这些服务器被安装。您可以在这里添加更多服务器。
-            ensure_installed = { 'gopls', 'lua_ls', 'ruff', 'omnisharp', 'rust_analyzer', 'marksman', 'intelephense' },
+            ensure_installed = { 
+                'rust_analyzer', 
+                'marksman', 
+                'intelephense',
+            },
             handlers = { function(server_name)
                 -- 尝试加载您在 lsp/ 目录下的自定义配置
                 local custom_opts_path = 'lsp.' .. server_name
@@ -34,12 +38,5 @@ return {
                 require('lspconfig')[server_name].setup(opts)
             end }
         }
-        -- 额外通过 mason 安装 DAP/formatter（非 LSP）
-        local mr = require('mason-registry')
-        for _, pkg in ipairs({ 'netcoredbg', 'csharpier' }) do
-            if not mr.is_installed(pkg) then
-                mr.get_package(pkg):install()
-            end
-        end
     end
 }
