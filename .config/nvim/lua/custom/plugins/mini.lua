@@ -43,5 +43,7 @@ return {
         suffix_next = 'n', -- Suffix to search with "next" method
       },
     }
+    require('mini.pairs').setup{}
+    require('mini.comment').setup{}
   end,
 }

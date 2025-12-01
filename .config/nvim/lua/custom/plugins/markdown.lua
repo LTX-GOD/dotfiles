@@ -4,17 +4,7 @@ return { {
     config = function()
         require 'custom.config.render-markdown'
     end
-}, {
-    'AndrewRadev/switch.vim',
-    config = function()
-        vim.keymap.set('n', '<leader>,', function()
-            vim.cmd [[Switch]]
-        end, {
-            desc = 'Switch strings'
-        })
-        vim.g.switch_custom_definitions = { { '> [!TODO]', '> [!WIP]', '> [!DONE]', '> [!FAIL]' } }
-    end
-}, {
+},  {
     'bullets-vim/bullets.vim',
     ft = { 'markdown' }
 }, {

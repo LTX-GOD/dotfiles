@@ -155,7 +155,7 @@ return {
       nesting_rules = {},
       filesystem = {
         filtered_items = {
-          visible = false, -- 当为true时，它们只是变暗而不是隐藏
+          visible = true, -- 当为true时，它们只是变暗而不是隐藏
           hide_dotfiles = true,
           hide_gitignored = true,
           hide_hidden = true, -- 仅在Windows上工作
