@@ -8,14 +8,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     }),
     callback = function(event)
         vim.keymap.set('n', 'gd', function()
-            local params = vim.lsp.util.make_position_params(0, 'utf-8')
-            vim.lsp.buf_request(0, 'textDocument/definition', params, function(_, result, _, _)
-                if not result or vim.tbl_isempty(result) then
-                    vim.notify('No definition found', vim.log.levels.INFO)
-                else
-                    require('snacks').picker.lsp_definitions()
-                end
-            end)
+            require('snacks').picker.lsp_definitions()
         end, {
             buffer = event.buf,
             desc = 'LSP: Goto Definition'
@@ -49,10 +42,13 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
         vim.keymap.set('n', '<leader>la', vim.lsp.buf.code_action, {
             buffer = event.buf,
-            desc = 'Lsp Action'
+            desc = 'LSP: Code Action'
         })
-        vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, {
+        vim.keymap.set('n', '<leader>rn', function()
+          return ':inc_rename ' .. vim.fn.expand('<cword>')
+        end, {
             buffer = event.buf,
+            expr = true,
             desc = 'LSP: Rename'
         })
 

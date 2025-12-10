@@ -1,6 +1,9 @@
 ---@diagnostic disable: missing-fields
 require('snacks').setup {
     notifier = {},
+    bufdelete = {},
+    git = {},
+    rename = {},
     picker = {
         matcher = {
             frecency = true,
@@ -24,42 +27,40 @@ require('snacks').setup {
     dashboard = {
         preset = {
             keys = { {
-                icon = '󰈞 ',
+                icon = ' ',
                 key = 'f',
-                desc = 'Find files',
-                action = ':lua Snacks.picker.smart()'
+                desc = 'Find File',
+                action = ':lua Snacks.dashboard.pick("files")'
             }, {
-                icon = ' ',
-                key = 'o',
-                desc = 'Find history',
-                action = 'lua Snacks.picker.recent()'
+                icon = ' ',
+                key = 'n',
+                desc = 'New File',
+                action = ':ene | startinsert'
             }, {
-                icon = ' ',
-                key = 'e',
-                desc = 'New file',
-                action = ':enew'
+                icon = ' ',
+                key = 'g',
+                desc = 'Find Text',
+                action = ':lua Snacks.dashboard.pick("live_grep")'
             }, {
-                icon = ' ',
-                key = 'o',
-                desc = 'Recent files',
-                action = ':lua Snacks.picker.recent()'
+                icon = ' ',
+                key = 'r',
+                desc = 'Recent Files',
+                action = ':lua Snacks.dashboard.pick("oldfiles")'
+            }, {
+                icon = ' ',
+                key = 'c',
+                desc = 'Config',
+                action = ':lua Snacks.dashboard.pick("files", {cwd = vim.fn.stdpath("config")})'
+            }, {
+                icon = ' ',
+                key = 's',
+                desc = 'Restore Session',
+                section = 'session'
             }, {
                 icon = '󰒲 ',
                 key = 'L',
                 desc = 'Lazy',
                 action = ':Lazy',
-                enabled = package.loaded.lazy ~= nil
-            }, {
-                icon = '󰔛 ',
-                key = 'P',
-                desc = 'Lazy Profile',
-                action = ':Lazy profile',
-                enabled = package.loaded.lazy ~= nil
-            }, {
-                icon = ' ',
-                key = 'M',
-                desc = 'Mason',
-                action = ':Mason',
                 enabled = package.loaded.lazy ~= nil
             }, {
                 icon = ' ',
@@ -88,15 +89,37 @@ require('snacks').setup {
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
             ]]
         },
-        sections = { {
-            section = 'header'
-        }, {
-            icon = ' ',
-            title = 'Keymaps',
-            section = 'keys',
-            indent = 2,
-            padding = 1
-        } }
+        sections = {
+            { section = "header" },
+            { section = "keys", gap = 1, padding = 1 },
+            { section = "startup" },
+            {
+                pane = 2,
+                section = "terminal",
+                icon = " ",
+                title = "Calendar",
+                cmd = "cal",
+                height = 10,
+                padding = 1,
+                indent = 2,
+            },
+            { pane = 2, icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
+            { pane = 2, icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
+            {
+                pane = 2,
+                icon = " ",
+                title = "Git Status",
+                section = "terminal",
+                enabled = function()
+                    return Snacks.git.get_root() ~= nil
+                end,
+                cmd = "git status --short --branch --renames",
+                height = 5,
+                padding = 1,
+                ttl = 5 * 60,
+                indent = 3,
+            },
+        }
     },
     image = {
         enabled = true,

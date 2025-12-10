@@ -12,7 +12,6 @@ return {
   end,
   config = function()
     -- require('mini.comment').setup {}
-    require('mini.files').setup {}
     require('mini.ai').setup { mappings = {
       goto_left = '[',
       goto_right = ']',

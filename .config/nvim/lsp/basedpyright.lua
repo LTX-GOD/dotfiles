@@ -48,11 +48,23 @@ return {
     '.git',
   },
   settings = {
+    python = {
+      pythonPath = get_uv_python_path(),
+    },
     basedpyright = {
       analysis = {
         autoSearchPaths = true,
         useLibraryCodeForTypes = true,
         diagnosticMode = 'openFilesOnly',
+        typeCheckingMode = 'standard',
+        diagnosticSeverityOverrides = {
+          reportMissingTypeStubs = 'none',
+          reportUnknownMemberType = 'none',
+          reportUnknownVariableType = 'none',
+          reportUnknownArgumentType = 'none',
+          reportUnusedImport = 'none', -- 由Ruff处理
+          reportWildcardImportFromLibrary = 'none', -- 由Ruff处理
+        },
       },
     },
   },

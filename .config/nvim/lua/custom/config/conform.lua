@@ -11,7 +11,7 @@ require('conform').setup {
     end,
     formatters_by_ft = {
         cpp = { 'clang-format' },
-        python = { 'ruff', 'isort' },
+        python = { 'ruff_fix', 'ruff' },
         snakemake = { 'snakefmt' },
         markdown = { 'prettierd', 'cbfmt' },
         typst = { 'typstyle' },

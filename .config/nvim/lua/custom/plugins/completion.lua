@@ -1,27 +1,7 @@
 return {
     'saghen/blink.cmp',
     -- 依赖项：代码片段支持
-    dependencies = {
-        'rafamadriz/friendly-snippets',
-        {
-            'L3MON4D3/LuaSnip',
-            version = '*',
-            config = function()
-                -- 加载 LuaSnip 代码片段
-                require('luasnip.loaders.from_lua').lazy_load()
-                -- 加载自定义 Lua 代码片段
-                require('luasnip.loaders.from_lua').lazy_load({
-                    paths = { vim.fn.stdpath('config') .. '/snippets' }
-                })
-                -- 加载 VSCode 格式代码片段
-                require('luasnip.loaders.from_vscode').lazy_load()
-                -- 加载自定义 VSCode 格式代码片段
-                require('luasnip.loaders.from_vscode').lazy_load({
-                    paths = { vim.fn.stdpath('config') .. '/snippets' }
-                })
-            end
-        }
-    },
+    
     -- 使用最新稳定版本
     version = '*',
     -- 懒加载：进入插入模式时加载
@@ -224,7 +204,6 @@ return {
 
         -- 代码片段配置
         snippets = {
-            preset = 'luasnip'
         }
     },
 
