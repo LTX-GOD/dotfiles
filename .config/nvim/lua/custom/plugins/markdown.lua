@@ -9,7 +9,7 @@ return { {
     ft = { 'markdown' }
 }, {
     'HakonHarnes/img-clip.nvim',
-    ft = { 'tex', 'markdown', 'typst' },
+    ft = { 'markdown'},
     opts = {
         default = {
             dir_path = './attachments',

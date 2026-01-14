@@ -1,7 +1,7 @@
 return {
   '3rd/image.nvim',
   -- 在 markdown 和 tex 文件类型中启用
-  ft = { 'markdown', 'tex', 'typst' },
+  ft = { 'markdown' },
   config = function()
     require('image').setup({
       -- 使用 kitty 后端进行图片渲染

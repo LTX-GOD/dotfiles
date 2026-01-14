@@ -1,4 +1,3 @@
--- lua/plugins/lualine.lua (用您的新配置替换整个 return 块)
 ---@type LazyPluginSpec
 return {
     'nvim-lualine/lualine.nvim',
