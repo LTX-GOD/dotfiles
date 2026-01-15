@@ -46,8 +46,8 @@ return {
         -- normal mode
         map('n', '<leader>gs', gitsigns.stage_hunk, { desc = 'git toggle stage hunk' })
         map('n', '<leader>gr', gitsigns.reset_hunk, { desc = 'git reset hunk' })
-        map('n', '<leader>gS', gitsigns.stage_buffer, { desc = 'git stage buffer' })
-        map('n', '<leader>gR', gitsigns.reset_buffer, { desc = 'git reset buffer' })
+        -- map('n', '<leader>gS', gitsigns.stage_buffer, { desc = 'git stage buffer' })
+        -- map('n', '<leader>gR', gitsigns.reset_buffer, { desc = 'git reset buffer' })
         map('n', '<leader>gp', gitsigns.preview_hunk, { desc = 'git preview hunk' })
         map('n', '<leader>gd', gitsigns.diffthis, { desc = 'git diff against index' })
         map('n', '<leader>gD', function()

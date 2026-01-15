@@ -218,27 +218,13 @@ return {
 
         commands = {} -- 添加自定义命令表，将在文件系统源中可用
       },
-      buffers = {
-        follow_current_file = {
-          enabled = true, -- 这将找到并聚焦当前文件在neo-tree中，每当
-                         -- 当前文件更改时。
-          leave_dirs_open = false, -- `false`关闭自动展开的目录，如`true`保持打开
-        },
-        group_empty_dirs = true, -- 当为true时，空文件夹将被分组在一起
-        show_unloaded = true,
-        window = {
-          mappings = {
-            ["bd"] = "buffer_delete",
-            ["<bs>"] = "navigate_up",
-            ["."] = "set_root",
-            ["o"] = { "show_help", nowait=false, config = { title = "Order by", prefix_key = "o" }},
-            ["oc"] = { "order_by_created", nowait = false },
-            ["od"] = { "order_by_diagnostics", nowait = false },
-            ["om"] = { "order_by_modified", nowait = false },
-            ["on"] = { "order_by_name", nowait = false },
-            ["os"] = { "order_by_size", nowait = false },
-            ["ot"] = { "order_by_type", nowait = false },
-          }
+      -- 禁用 buffers 源，因为使用 bento.nvim 进行管理
+      source_selector = {
+        winbar = false,
+        statusline = false,
+        sources = {
+            { source = "filesystem" },
+            { source = "git_status" },
         },
       },
       git_status = {
