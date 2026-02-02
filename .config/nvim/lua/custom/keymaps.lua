@@ -1,160 +1,91 @@
 local custom_pickers = require 'custom.pickers'
-vim.keymap.set('i', 'jk', '<esc>', {
-    noremap = true,
-    silent = true
-})
-vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", {
-    expr = true,
-    silent = true,
-    desc = 'Move cursor down'
-})
-vim.keymap.set('x', 'j', "v:count == 0 ? 'gj' : 'j'", {
-    expr = true,
-    silent = true,
-    desc = 'Move cursor down'
-})
-vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", {
-    expr = true,
-    silent = true,
-    desc = 'Move cursor up'
-})
-vim.keymap.set('x', 'k', "v:count == 0 ? 'gk' : 'k'", {
-    expr = true,
-    silent = true,
-    desc = 'Move cursor up'
-})
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
-vim.keymap.set('n', '\\', '<CMD>:sp<CR>', {
-    desc = 'Split window horizontally'
-})
-vim.keymap.set('n', '|', '<CMD>:vsp<CR>', {
-    desc = 'Split window vertically'
-})
-vim.keymap.set('n', ']q', '<cmd>cnext<cr>', {
-    desc = 'Go to next qf item'
-})
-vim.keymap.set('n', '[q', '<cmd>cprev<cr>', {
-    desc = 'Go to prev qf item'
-})
-vim.keymap.set('n', '<C-d>', '5j', {
-    desc = 'Scroll down by 5 lines'
-})
-vim.keymap.set('n', '<C-u>', '5k', {
-    desc = 'Scroll up by 5 lines'
-})
-vim.keymap.set('n', 'L', 'gt', {
-    noremap = true,
-    desc = 'Go to next tab'
-})
-vim.keymap.set('n', 'H', 'gT', {
-    noremap = true,
-    desc = 'Go to prev tab'
-})
+local custom_utils = require 'custom.utils'
 
--- Buffer management is now handled by bento.nvim
--- Use ; to toggle buffer menu
--- Use ;j, ;k, etc. to jump to buffers
+-- 映射辅助函数
+local function map(mode, lhs, rhs, opts)
+    opts = opts or {}
+    opts.silent = opts.silent ~= false
+    vim.keymap.set(mode, lhs, rhs, opts)
+end
 
+-- =============================================================================
+-- 基础移动增强
+-- =============================================================================
+-- 映射 jk 为 <Esc>
+map('i', 'jk', '<esc>', { noremap = true })
 
-vim.keymap.set('n', '+', '<C-w>|<C-w>_', {
-    desc = 'Maximize nvim pane'
-})
-vim.keymap.set('n', '=', '<C-w>=', {
-    desc = 'Restore nvim panes'
-})
-vim.keymap.set('v', 'p', '"_dP', {
-    noremap = true
-})
-vim.keymap.set('v', '<leader>p', 'p', {
-    noremap = true
-})
-vim.keymap.set('n', '<space>X', '<cmd>source %<cr>', {
-    desc = 'Run this lua file'
-})
-vim.keymap.set('n', '<space>x', ':.lua<cr>', {
-    desc = 'Run this line'
-})
-vim.keymap.set('v', '<space>x', ':lua<cr>', {
-    desc = 'Run selection'
-})
+-- 处理自动换行后的上下移动
+map({'n', 'x'}, 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, desc = 'Move cursor down' })
+map({'n', 'x'}, 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, desc = 'Move cursor up' })
 
-local feedkeys = vim.api.nvim_feedkeys
-local t = vim.api.nvim_replace_termcodes
-vim.keymap.set('n', '<leader>tz', function()
-    feedkeys(t('<leader>tg', true, true, true), 'm', false)
-    feedkeys(t('<leader>th', true, true, true), 'm', false)
-    feedkeys(t('<leader>td', true, true, true), 'm', false)
-    feedkeys(t('<leader>tt', true, true, true), 'm', false)
-end, {
-    noremap = true,
-    silent = true,
-    desc = 'Toggle distraction free'
-})
+-- 行首行尾快捷键 (Alt+Left/Right)
+map({'n','i'}, '<A-Left>', '<Esc>^i', { desc = 'Go to start of line' })
+map({'n','i'}, '<A-Right>', '<Esc>$i', { desc = 'Go to end of line' })
 
-vim.keymap.set('n', '<leader>fg', custom_pickers.pick_repositories)
-vim.keymap.set("n", "<C-w><C-t>", function()
+-- =============================================================================
+-- 窗口管理
+-- =============================================================================
+-- 清除搜索高亮
+map('n', '<Esc>', '<cmd>nohlsearch<CR>')
+
+-- 分屏
+map('n', '\\', '<CMD>:sp<CR>', { desc = 'Split window horizontally' })
+map('n', '|', '<CMD>:vsp<CR>', { desc = 'Split window vertically' })
+
+-- 窗口最大化/恢复
+map('n', '+', '<C-w>|<C-w>_', { desc = 'Maximize nvim pane' })
+map('n', '=', '<C-w>=', { desc = 'Restore nvim panes' })
+
+-- =============================================================================
+-- 导航与跳转
+-- =============================================================================
+-- 标签页切换
+map('n', 'L', 'gt', { noremap = true, desc = 'Go to next tab' })
+map('n', 'H', 'gT', { noremap = true, desc = 'Go to prev tab' })
+
+-- 当前 buffer 在新 Tab 打开
+map("n", "<C-w><C-t>", function()
     local buf = vim.api.nvim_get_current_buf()
     vim.cmd("tabnew")
     vim.api.nvim_set_current_buf(buf)
-end, {
-    desc = "Open current buffer in new tab"
-})
+end, { desc = "Open current buffer in new tab" })
 
-local function jump_to_file_lnum_from_all_windows()
-    local matches = {}
-    local seen = {}
+-- 快速滚动
+map('n', '<C-d>', '5j', { desc = 'Scroll down by 5 lines' })
+map('n', '<C-u>', '5k', { desc = 'Scroll up by 5 lines' })
 
-    for _, win in ipairs(vim.api.nvim_list_wins()) do
-        local buf = vim.api.nvim_win_get_buf(win)
+-- Quickfix 列表
+map('n', ']q', '<cmd>cnext<cr>', { desc = 'Go to next qf item' })
+map('n', '[q', '<cmd>cprev<cr>', { desc = 'Go to prev qf item' })
 
-        -- Avoid duplicates if multiple windows show the same buffer
-        if not seen[buf] then
-            seen[buf] = true
-            local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+-- =============================================================================
+-- 剪贴板与编辑
+-- =============================================================================
+-- 粘贴时不替换剪贴板内容
+map('v', 'p', '"_dP', { noremap = true })
+map('v', '<leader>p', 'p', { noremap = true, desc = 'Paste regular' })
 
-            for lnum, line in ipairs(lines) do
-                for filepath, lno in string.gmatch(line, '([%w%./~_-]+):(%d+)') do
-                    table.insert(matches, {
-                        label = filepath .. ':' .. lno,
-                        file = filepath,
-                        lnum = tonumber(lno)
-                    })
-                end
-            end
-        end
-    end
+-- 代码执行
+map('n', '<space>X', '<cmd>source %<cr>', { desc = 'Run this lua file' })
+map('n', '<space>x', ':.lua<cr>', { desc = 'Run this line' })
+map('v', '<space>x', ':lua<cr>', { desc = 'Run selection' })
 
-    if vim.tbl_isempty(matches) then
-        vim.notify("No file:line patterns found in any window", vim.log.levels.INFO)
-        return
-    end
+-- =============================================================================
+-- 自定义功能
+-- =============================================================================
+-- 专注模式
+map('n', '<leader>tz', custom_utils.toggle_distraction_free, { desc = 'Toggle distraction free' })
 
-    vim.ui.select(matches, {
-        prompt = "Jump to file:line",
-        format_item = function(item)
-            return item.label
-        end
-    }, function(choice)
-        if choice then
-            vim.cmd('edit ' .. choice.file)
-            vim.api.nvim_win_set_cursor(0, {choice.lnum, 0})
-        end
-    end)
-end
+-- 从所有窗口中跳转到 "file:line"
+map('n', '<leader>fJ', custom_utils.jump_to_file_lnum_from_all_windows, { desc = 'Jump to file:line from any window' })
 
-vim.keymap.set('n', '<leader>fJ', jump_to_file_lnum_from_all_windows, {
-    desc = 'Jump to file:line from any window'
-})
+-- Git 仓库 Picker
+map('n', '<leader>fg', custom_pickers.pick_repositories, { desc = 'Find git repositories' })
 
-vim.keymap.set('n', '<leader>tm', function()
-    vim.cmd('split | terminal')
-end, {
-    desc = 'Open horizontal terminal'
-})
-vim.keymap.set('n', '<leader>mt', '<cmd>close<cr>', {
-    desc = 'Close terminal'
-})
-
-vim.keymap.set({'n','i'}, '<A-Left>', '<Esc>^i', {desc='行首'})
-vim.keymap.set({'n','i'}, '<A-Right>', '<Esc>$i', {desc='行尾'})
-
+-- =============================================================================
+-- 终端 (简单的原生终端，复杂功能见 Toggleterm)
+-- =============================================================================
+-- 注意：这里使用了 <leader>tm，与 toggleterm 的快捷键可能需要协调
+-- 如果你主要使用 toggleterm，可以考虑移除这里的原生终端映射
+map('n', '<leader>tm', '<cmd>split | terminal<cr>', { desc = 'Open horizontal terminal (native)' })
+map('n', '<leader>mt', '<cmd>close<cr>', { desc = 'Close terminal' })

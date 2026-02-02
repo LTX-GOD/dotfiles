@@ -1,52 +1,32 @@
-require('conform').setup {
-    notify_on_error = true,
-    format_on_save = function(bufnr)
-        if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
-            return
-        end
-        return {
-            timeout_ms = 5000,
-            lsp_format = 'fallback'
-        }
-    end,
-    formatters_by_ft = {
-        cpp = { 'clang-format' },
-        python = { 'ruff_fix', 'ruff' },
-        snakemake = { 'snakefmt' },
-        markdown = { 'prettierd', 'cbfmt' },
-        typst = { 'typstyle' },
-        nix = { 'nixfmt' },
-        json = { 'prettierd' },
-        toml = { 'taplo' },
-        go = { 'gofmt', 'goimports' },
-    },
-    formatters = {
-        
-        taplo = {
-            command = 'taplo',
-            args = { 'fmt', '--option', 'indent_tables=false', '-' }
-        },
-        ruff_fix = {
-            command = 'ruff',
-            args = { 'check', '--select', 'I', '--fix', '--stdin-filename', '$FILENAME', '-' },
-            stdin = true
-        }
-    }
-}
-
-vim.api.nvim_create_user_command('ConformDisable', function(args)
-    if args.bang then
-        vim.b.disable_autoformat = true
-    else
-        vim.g.disable_autoformat = true
+return {
+  notify_on_error = true,
+  format_on_save = function(bufnr)
+    if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+      return
     end
-end, {
-    desc = 'Disable autoformat-on-save',
-    bang = true
-})
-vim.api.nvim_create_user_command('ConformEnable', function()
-    vim.b.disable_autoformat = false
-    vim.g.disable_autoformat = false
-end, {
-    desc = 'Re-enable autoformat-on-save'
-})
+    return {
+      timeout_ms = 5000,
+      lsp_format = 'fallback',
+    }
+  end,
+  formatters_by_ft = {
+    cpp = { 'clang-format' },
+    python = { 'ruff_fix', 'ruff_format' },
+    snakemake = { 'snakefmt' },
+    markdown = { 'prettierd', 'cbfmt' },
+    json = { 'prettierd' },
+    toml = { 'taplo' },
+    go = { 'gofmt', 'goimports' },
+  },
+  formatters = {
+    taplo = {
+      command = 'taplo',
+      args = { 'fmt', '--option', 'indent_tables=false', '-' },
+    },
+    ruff_fix = {
+      command = 'ruff',
+      args = { 'check', '--select', 'I', '--fix', '--stdin-filename', '$FILENAME', '-' },
+      stdin = true,
+    },
+  },
+}

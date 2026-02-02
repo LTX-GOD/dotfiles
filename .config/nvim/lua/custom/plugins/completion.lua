@@ -186,9 +186,25 @@ return {
             ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
             ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
 
-            -- Tab 键行为:补全选择
-            ['<Tab>'] = { 'select_next', 'fallback' },
-            ['<S-Tab>'] = { 'select_prev', 'fallback' },
+            -- Tab 键行为: Snippet -> Sidekick -> Inline -> Completion -> Fallback
+            ['<Tab>'] = {
+                'snippet_forward',
+                function(cmp)
+                    if package.loaded['sidekick'] then
+                         local ok, result = pcall(require('sidekick').nes_jump_or_apply)
+                         if ok and result then return true end
+                    end
+                end,
+                -- 兼容 Neovim 原生 inline completion (如果未来使用)
+                function()
+                    if vim.lsp.inline_completion then
+                         return vim.lsp.inline_completion.get()
+                    end
+                end,
+                'select_next',
+                'fallback'
+            },
+            ['<S-Tab>'] = { 'snippet_backward', 'select_prev', 'fallback' },
 
             -- 回车键：接受选中项
             ['<CR>'] = { 'accept', 'fallback' }

@@ -11,6 +11,24 @@ return {
         vim.notify('Autoformat is disabled', vim.log.levels.WARN)
       end
     end, { desc = 'Toggle autoformatting' })
+    
+    -- 用户命令
+    vim.api.nvim_create_user_command('ConformDisable', function(args)
+        if args.bang then
+            vim.b.disable_autoformat = true
+        else
+            vim.g.disable_autoformat = true
+        end
+    end, {
+        desc = 'Disable autoformat-on-save',
+        bang = true
+    })
+    vim.api.nvim_create_user_command('ConformEnable', function()
+        vim.b.disable_autoformat = false
+        vim.g.disable_autoformat = false
+    end, {
+        desc = 'Re-enable autoformat-on-save'
+    })
   end,
   event = { 'BufWritePre', 'InsertEnter' },
   cmd = { 'ConformInfo', 'FormatEnable', 'FormatDisable' },
@@ -23,7 +41,8 @@ return {
       desc = 'Format buffer',
     },
   },
-  config = function()
-    require 'custom.config.conform'
+  -- 使用 opts 字段直接引用配置，lazy.nvim 会自动 require
+  opts = function()
+    return require('custom.config.conform')
   end,
 }
