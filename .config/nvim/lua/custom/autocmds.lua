@@ -31,7 +31,6 @@ vim.filetype.add {
     ['.*'] = {
       function(path, buf)
         if vim.bo[buf].filetype ~= 'bigfile' and path and vim.fn.getfsize(path) > vim.g.bigfile_size then
-          vim.opt.cursorline = false
           return 'bigfile'
         else
           return nil
@@ -49,6 +48,10 @@ vim.api.nvim_create_autocmd({ 'FileType' }, {
     vim.schedule(function()
       vim.bo[ev.buf].syntax = vim.filetype.match { buf = ev.buf } or ''
     end)
+    vim.bo[ev.buf].swapfile = false
+    vim.wo.cursorline = false
+    vim.wo.wrap = false
+    vim.wo.linebreak = false
   end,
 })
 
@@ -80,8 +83,8 @@ vim.api.nvim_create_autocmd('VimResized', {
     vim.cmd 'wincmd =' -- Equalize window sizes
 
     -- DAP UI
-    custom_utils.func_on_window('dapui_stacks', function ()
-        require 'dapui'.open({ reset = true })
+    custom_utils.func_on_window('dapui_stacks', function()
+      require 'dapui'.open({ reset = true })
     end)
 
     -- OverseerList

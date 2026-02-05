@@ -58,7 +58,6 @@ return {
         autoSearchPaths = true,
         useLibraryCodeForTypes = true,
         autoImportCompletions = true,
-        diagnosticMode = 'workspace',
         typeCheckingMode = 'off',
       },
     },

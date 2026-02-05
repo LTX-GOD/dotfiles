@@ -15,12 +15,12 @@ end
 map('i', 'jk', '<esc>', { noremap = true })
 
 -- 处理自动换行后的上下移动
-map({'n', 'x'}, 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, desc = 'Move cursor down' })
-map({'n', 'x'}, 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, desc = 'Move cursor up' })
+map({ 'n', 'x' }, 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, desc = 'Move cursor down' })
+map({ 'n', 'x' }, 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, desc = 'Move cursor up' })
 
 -- 行首行尾快捷键 (Alt+Left/Right)
-map({'n','i'}, '<A-Left>', '<Esc>^i', { desc = 'Go to start of line' })
-map({'n','i'}, '<A-Right>', '<Esc>$i', { desc = 'Go to end of line' })
+map({ 'n', 'i' }, '<A-Left>', '<Esc>^i', { desc = 'Go to start of line' })
+map({ 'n', 'i' }, '<A-Right>', '<Esc>$i', { desc = 'Go to end of line' })
 
 -- =============================================================================
 -- 窗口管理
@@ -82,10 +82,5 @@ map('n', '<leader>fJ', custom_utils.jump_to_file_lnum_from_all_windows, { desc =
 -- Git 仓库 Picker
 map('n', '<leader>fg', custom_pickers.pick_repositories, { desc = 'Find git repositories' })
 
--- =============================================================================
--- 终端 (简单的原生终端，复杂功能见 Toggleterm)
--- =============================================================================
--- 注意：这里使用了 <leader>tm，与 toggleterm 的快捷键可能需要协调
--- 如果你主要使用 toggleterm，可以考虑移除这里的原生终端映射
 map('n', '<leader>tm', '<cmd>split | terminal<cr>', { desc = 'Open horizontal terminal (native)' })
 map('n', '<leader>mt', '<cmd>close<cr>', { desc = 'Close terminal' })
