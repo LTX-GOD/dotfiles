@@ -1,4 +1,3 @@
-# Yazi 修正配置 - 适配 v26.1.4
 "$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
 
 [mgr]
@@ -40,7 +39,7 @@ open = [
 reveal = [
 	{ run = 'open -R %s1', desc = "Reveal", for = "macos" },
 	{ run = 'xdg-open %d1', desc = "Reveal", for = "linux" },
-	{ run = '''clear; exiftool %s1; echo "Press enter to exit"; read _''', block = true, desc = "Show EXIF", for = "unix" },
+	{ run = '''clear; exiftool %s1; echo "Press enter to exit"; read _''' }
 ]
 extract = [
 	{ run = 'ya pub extract --list %s', desc = "Extract here" },

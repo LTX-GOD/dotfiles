@@ -12,33 +12,6 @@ M.is_mac = function()
   return uname.sysname == 'Darwin'
 end
 
---- Execute a function on a window with a specific filetype
----@param window_name string The filetype to search for
----@param myfunc function The function to execute
-M.func_on_window = function(window_name, myfunc)
-  for _, win in ipairs(vim.api.nvim_list_wins()) do
-    local buf = vim.api.nvim_win_get_buf(win)
-    local ft = vim.api.nvim_get_option_value('filetype', {buf = buf})
-    if ft == window_name then
-      myfunc()
-      break
-    end
-  end
-end
-
---- Reset the width of OverseerList window
-M.reset_overseerlist_width = function ()
-    for _, win in ipairs(vim.api.nvim_list_wins()) do
-      local buf = vim.api.nvim_win_get_buf(win)
-      local ft = vim.api.nvim_get_option_value('filetype', {buf = buf})
-      if ft == 'OverseerList' then
-        local target_width = math.floor(vim.o.columns * 0.2)
-        vim.api.nvim_win_set_width(win, target_width)
-        break
-      end
-    end
-end
-
 --- Jump to file:line detected in any window (useful for log files)
 M.jump_to_file_lnum_from_all_windows = function()
     local matches = {}

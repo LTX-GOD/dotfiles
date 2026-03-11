@@ -1,6 +1,5 @@
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
-local custom_utils = require("custom.utils")
 
 local function augroup(name)
   return vim.api.nvim_create_augroup('lazyvim_' .. name, { clear = true })
@@ -68,7 +67,7 @@ vim.api.nvim_create_autocmd('BufWinEnter', {
   group = 'IrreplaceableWindows',
   pattern = '*',
   callback = function()
-    local filetypes = { 'OverseerList', 'neo-tree' }
+    local filetypes = { 'neo-tree' }
     local buftypes = { 'nofile', 'terminal' }
     if vim.tbl_contains(buftypes, vim.bo.buftype) and vim.tbl_contains(filetypes, vim.bo.filetype) then
       vim.cmd 'set winfixbuf'
@@ -79,21 +78,9 @@ vim.api.nvim_create_autocmd('BufWinEnter', {
 vim.api.nvim_create_autocmd('VimResized', {
   pattern = '*',
   callback = function()
-    -- File buffers
-    vim.cmd 'wincmd =' -- Equalize window sizes
-
-    -- DAP UI
-    custom_utils.func_on_window('dapui_stacks', function()
-      require 'dapui'.open({ reset = true })
-    end)
-
-    -- OverseerList
-    custom_utils.reset_overseerlist_width()
+    vim.cmd 'wincmd ='
   end,
 })
--- Global mapping for normal windows
-vim.keymap.set('n', '<CR>', 'za', { desc = 'Toggle fold under cursor' })
-
 -- Override mapping in quickfix window
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'qf',

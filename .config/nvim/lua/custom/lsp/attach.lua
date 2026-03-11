@@ -47,7 +47,7 @@ function M.setup()
 
             -- 重命名
             vim.keymap.set('n', '<leader>rn', function()
-                return ':inc_rename ' .. vim.fn.expand('<cword>')
+                return ':IncRename ' .. vim.fn.expand('<cword>')
             end, {
                 buffer = event.buf,
                 expr = true,

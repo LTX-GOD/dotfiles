@@ -4,7 +4,7 @@ vim.filetype.add {
     ipynb = 'ipynb',
     ent = 'xml',
     h = function(_, bufnr)
-      local first_line = vim.api.nvim_buf_get_lines(bufnr, 1, 2, false)[1] or ''
+      local first_line = vim.api.nvim_buf_get_lines(bufnr, 0, 1, false)[1] or ''
       if first_line:match 'NVIDIA Corporation' then
         return 'cuda'
       end
@@ -56,6 +56,7 @@ vim.api.nvim_create_autocmd('BufRead', {
       if vim.fn.filereadable(full_path) == 0 then
         local file = io.open(full_path, 'w')
         if file then
+          file:close()
           vim.cmd('edit ' .. vim.fn.fnameescape(full_path))
           vim.cmd 'bd!'
           vim.api.nvim_echo({

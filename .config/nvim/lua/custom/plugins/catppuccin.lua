@@ -1,30 +1,16 @@
 return {
   'catppuccin/nvim',
   priority = 1000, -- Make sure to load this before all the other start plugins.
-  init = function()
-    vim.cmd.colorscheme 'catppuccin-mocha'
-    vim.cmd.hi 'Comment gui=none'
-  end,
   config = function()
     require('catppuccin').setup {
       transparent_background = true,
       term_colors = true,
       integrations = {
-        aerial = true,
-        diffview = true,
         mini = {
           enabled = true,
           indentscope_color = 'sky',
         },
-        noice = true,
-        -- overseer = true,
-        telescope = {
-          enabled = true,
-          -- style = "nvchad",
-        },
-        nvimtree = true,
         neotree = true,
-        which_key = true,
         treesitter = true,
         notify = true,
         gitsigns = true,
@@ -37,9 +23,6 @@ return {
         mocha = function(mocha)
           return {
             CursorLineNr = { fg = mocha.yellow },
-            TelescopeSelection = { bg = mocha.surface0 },
-            TelescopeSelectionCaret = { fg = mocha.yellow, bg = mocha.surface0 },
-            TelescopePromptPrefix = { fg = mocha.yellow },
             FlashCurrent = { bg = mocha.peach, fg = mocha.base },
             FlashMatch = { bg = mocha.red, fg = mocha.base },
             FlashLabel = { bg = mocha.teal, fg = mocha.base }
@@ -47,5 +30,7 @@ return {
         end,
       },
     }
+    vim.cmd.colorscheme 'catppuccin-mocha'
+    vim.cmd.hi 'Comment gui=none'
   end,
 }

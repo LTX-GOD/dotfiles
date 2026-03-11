@@ -96,4 +96,33 @@ return {
     -- see: https://github.com/neovim/nvim-lspconfig/issues/804
     on_dir(get_root_dir(fname))
   end,
+  settings = {
+    gopls = {
+      gofumpt = true,
+      staticcheck = true,
+      usePlaceholders = true,
+      completeUnimported = true,
+      analyses = {
+        unusedparams = true,
+        unusedwrite = true,
+        nilness = true,
+        shadow = true,
+      },
+      hints = {
+        assignVariableTypes = true,
+        compositeLiteralFields = true,
+        compositeLiteralTypes = true,
+        constantValues = true,
+        functionTypeParameters = true,
+        parameterNames = true,
+        rangeVariableTypes = true,
+      },
+      codelenses = {
+        gc_details = true,
+        generate = true,
+        test = true,
+        tidy = true,
+      },
+    },
+  },
 }

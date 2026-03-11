@@ -31,7 +31,7 @@ return {
     })
   end,
   event = { 'BufWritePre', 'InsertEnter' },
-  cmd = { 'ConformInfo', 'FormatEnable', 'FormatDisable' },
+  cmd = { 'ConformInfo', 'ConformEnable', 'ConformDisable' },
   keys = {
     {
       '<leader>lf',

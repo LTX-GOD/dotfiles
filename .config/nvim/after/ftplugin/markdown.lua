@@ -1,4 +1,3 @@
-vim.lsp.enable 'marksman'
 vim.opt.conceallevel = 2
 vim.keymap.set('n', 'gx', function()
   local line = vim.fn.getline '.'

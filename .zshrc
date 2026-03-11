@@ -1,7 +1,3 @@
-# ==============================================================================
-# Zinit 插件管理器
-# ==============================================================================
-### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
     print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
     command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
@@ -31,21 +27,12 @@ zinit light zdharma/history-search-multi-word
 zinit ice lucid wait'0' atinit'eval "$(thefuck --alias)"'
 zinit light "zdharma-continuum/null"
 
-### End of Zinit's installer chunk
-
-# ==============================================================================
-# 语言环境初始化 (交互式部分)
-# ==============================================================================
-
 # Rust
 source "$HOME/.cargo/env"
 
 # OrbStack
 source "$HOME/.orbstack/shell/init.zsh" 2>/dev/null || :
 
-# ==============================================================================
-# 别名和函数 (ALIASES & FUNCTIONS)
-# ==============================================================================
 export EDITOR=nvim
 # yazi
 function y() {
@@ -56,10 +43,6 @@ function y() {
 	rm -f -- "$tmp"
 }
 
-# ==============================================================================
-# Shell 外观和历史记录
-# ==============================================================================
-# ls高亮
 source /Users/zsm/.config/color.sh
 
 # Starship Prompt
@@ -71,20 +54,6 @@ SAVEHIST=$HISTSIZE
 HISTFILE=~/.zsh_history
 setopt appendhistory hist_ignore_space hist_ignore_all_dups hist_save_no_dups
 
-
-# tree
-alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
-
-# nvim->vim
-alias vim='nvim'
-
-# CTF 工具
-alias cyber='open -a "Safari" /Users/zsm/CTF/tool/CyberChef_v10/CyberChef_v10.19.4.html'
-alias pycdc='/Users/zsm/CTF/tool/pycdc/build/pycdc'
-
-# 使用 gls (coreutils)
-alias ls='gls --color=auto'
-
 # uv
 . "$HOME/.local/bin/env"
 export PATH="$HOME/.cargo/bin:$PATH"
@@ -92,3 +61,67 @@ export PATH="$HOME/.cargo/bin:$PATH"
 autoload -Uz compinit
 compinit
 eval "$(uv generate-shell-completion zsh)"
+
+# tree
+alias tree="find . -print | sed -e 's;[^/]*/;|____;g;s;____|; |;g'"
+
+# nvim->vim
+alias vim='nvim'
+
+# 使用 gls (coreutils)
+alias ls='gls --color=auto'
+
+# jvav
+alias jvav='java'
+
+# ssh
+alias ssh='kitten ssh'
+
+# john
+export PATH="$PATH:/opt/homebrew/Cellar/john-jumbo/1.9.0_1/share/john/"
+
+# flask-session-cookie-manager
+flask_session_cookie_manager(){
+  uv run ~/CTF/tool/uv-web/flask-session-cookie-manager/.venv/bin/python3 ~/CTF/tool/uv-web/flask-session-cookie-manager/flask_session_cookie_manager3.py "$@"
+} 
+
+# ghauri
+ghauri() {
+  uv run ~/CTF/tool/uv-web/ghauri/.venv/bin/ghauri "$@"
+}
+
+# GitHack
+Githack() {
+  uv run ~/CTF/tool/uv-web/GitHack/.venv/bin/python3 ~/CTF/tool/uv-web/GitHack/GitHack.py "$@"
+}
+
+# PyGlimmer
+PyGlimmer() {
+  uv run ~/CTF/tool/uv-web/PyGlimmer/.venv/bin/python3 ~/CTF/tool/uv-web/PyGlimmer/PyGlimmer.py "$@"
+}
+
+# pycdc
+export PATH="/Users/zsm/CTF/tool/pycdc/build:$PATH"
+
+# SMScan
+export PATH="/Users/zsm/CTF/tool/SMScan:$PATH"
+
+# 代理
+proxy() { 
+  export http_proxy="http://127.0.0.1:7897"; export https_proxy="http://127.0.0.1:7897"; export all_proxy="socks5://127.0.0.1:7897"; 
+} 
+unproxy() { 
+  unset http_proxy; unset https_proxy; unset all_proxy; 
+}
+
+#export ANTHROPIC_AUTH_TOKEN=sk-oEhxgejXZNk8koSOSOShafMEGbdstkPr0VXOTjD9hZxbnmEm
+#export ANTHROPIC_BASE_URL=https://anyrouter.top
+
+# bun completions
+[ -s "/Users/zsm/.bun/_bun" ] && source "/Users/zsm/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+
