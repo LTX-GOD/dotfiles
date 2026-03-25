@@ -27,7 +27,6 @@ return {
                     'rust_analyzer',
                     'marksman',
                     'intelephense',
-                    'basedpyright',
                     'clangd',
                     'gopls',
                     'ruff',

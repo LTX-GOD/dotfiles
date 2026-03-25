@@ -42,9 +42,9 @@ return {
       },
     }
   },
-  -- 禁用hover功能，让其他LSP处理（如果同时使用pyright）
+  -- 禁用hover和rename功能，让ty处理
   on_attach = function(client, bufnr)
-    -- 禁用hover以避免与其他Python LSP冲突
     client.server_capabilities.hoverProvider = false
+    client.server_capabilities.renameProvider = false
   end,
 }
