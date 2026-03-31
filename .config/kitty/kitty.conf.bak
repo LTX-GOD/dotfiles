@@ -5,20 +5,84 @@ include dark-theme.auto.conf
 
 # font
 font_size 12
-font_family          Monaspace Radon
-disable_ligatures never
+# font_family          Monaspace Radon
 
+cursor_shape beam
 # window
 hide_window_decorations        titlebar-only
-window_padding_width           15
-background_opacity             0.8
-background_blur                64
+window_padding_width           10
+window_border_width            0.5pt
+draw_minimal_borders           yes
+
+background_opacity             0.6
+background_blur                20
 remember_window_size           yes
 
-# tab bar
+# tab bar配置
 tab_bar_edge                top
 tab_bar_style               powerline
 tab_powerline_style         slanted
 
+# 普通标签模板（不加方括号）
+# 移除应用前缀，只显示纯净标题
+tab_title_template "{fmt.fg.red}{bell_symbol}{activity_symbol}{fmt.fg.tab}{index} {title.split('/')[-1] if '/' in title else title.replace('zsm@mac:', '')}"
+
+active_tab_title_template "{fmt.fg.red}{bell_symbol}{activity_symbol}{fmt.fg.tab}[{index} {title.split('/')[-1] if '/' in title else title.replace('zsm@mac:', '')}]"
+
 # general key mapping
 macos_option_as_alt yes 
+
+cursor_trail 3
+
+font_family      family='Monaspace Radon' variable_name=MonaspaceRadonVar style=MonaspaceRadonVar-Regular
+bold_font        auto
+italic_font      auto
+bold_italic_font auto
+font_features  calt=1 liga=1 ss01=1 ss02=1 ss03=1 ss04=1 ss05=1 ss06=1 ss07=1 ss08=1 ss09=1 cv35=1
+
+
+# bold_font        auto
+# italic_font      auto
+# bold_italic_font auto
+enabled_layouts splits
+enable_audio_bell no
+
+symbol_map U+4E00-U+9FFF LXGW WenKai Mono GB Screen
+symbol_map U+3400-U+4DBF LXGW WenKai Mono GB Screen
+symbol_map U+20000-U+2A6DF LXGW WenKai Mono GB Screen
+symbol_map U+2A700-U+2B73F LXGW WenKai Mono GB Screen
+symbol_map U+2B740-U+2B81F LXGW WenKai Mono GB Screen
+symbol_map U+2B820-U+2CEAF LXGW WenKai Mono GB Screen
+
+
+disable_ligatures never
+
+# 跳到行开头和结尾
+map cmd+left send_text all \x01
+map cmd+right send_text all \x05
+
+# 跳转标签
+map cmd+1 goto_tab 1
+map cmd+2 goto_tab 2
+map cmd+3 goto_tab 3
+map cmd+4 goto_tab 4
+map cmd+5 goto_tab 5
+map cmd+6 goto_tab 6
+map cmd+7 goto_tab 7
+map cmd+8 goto_tab 8
+map cmd+9 goto_tab 9
+
+# 分割的终端跳转
+map cmd+]        next_window
+map cmd+[        previous_window
+
+# 分割方法
+map cmd+w close_window
+map cmd+shift+t new_os_window
+map cmd+shift+d launch --location=hsplit --cwd=current
+map cmd+d launch --location=vsplit --cwd=current
+
+
+map cmd+s send_text all \e:w\r
+
+

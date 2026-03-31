@@ -106,6 +106,15 @@ export PATH="/Users/zsm/CTF/tool/pycdc/build:$PATH"
 # SMScan
 export PATH="/Users/zsm/CTF/tool/SMScan:$PATH"
 
+# WASM反编译
+export PATH="/Users/zsm/CTF/tool/wabt-1.0.39:$PATH"
+
+# java8
+alias java8="/Users/zsm/CTF/tool/jdk8/bin/java"
+
+# java11
+alias java11="/Users/zsm/CTF/tool/jdk11/bin/java"
+
 # 代理
 proxy() { 
   export http_proxy="http://127.0.0.1:7897"; export https_proxy="http://127.0.0.1:7897"; export all_proxy="socks5://127.0.0.1:7897"; 
@@ -114,9 +123,6 @@ unproxy() {
   unset http_proxy; unset https_proxy; unset all_proxy; 
 }
 
-#export ANTHROPIC_AUTH_TOKEN=sk-oEhxgejXZNk8koSOSOShafMEGbdstkPr0VXOTjD9hZxbnmEm
-#export ANTHROPIC_BASE_URL=https://anyrouter.top
-
 # bun completions
 [ -s "/Users/zsm/.bun/_bun" ] && source "/Users/zsm/.bun/_bun"
 
@@ -124,4 +130,6 @@ unproxy() {
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+export OSU_MODELS_DIR="/Volumes/AI/osaurus"
+export PATH="$HOME/.gem/ruby/2.6.0/bin:$PATH"
 
