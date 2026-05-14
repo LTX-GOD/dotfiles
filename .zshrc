@@ -24,7 +24,6 @@ zinit light zsh-users/zsh-autosuggestions
 zinit light zsh-users/zsh-completions
 zinit light zdharma/history-search-multi-word
 
-zinit ice lucid wait'0' atinit'eval "$(thefuck --alias)"'
 zinit light zdharma-continuum/null
 
 # ---------- Env ----------
@@ -128,11 +127,14 @@ alias pyglimmer='uvweb PyGlimmer/PyGlimmer.py'
 alias fscm='uvweb flask-session-cookie-manager/flask_session_cookie_manager3.py'
 alias fscm2='uvweb flask-session-cookie-manager/flask_session_cookie_manager2.py'
 alias jjs='uvweb jjjjjjjjjjjjjs/jjjjjjjjjjjjjs.py'
+alias burp='cd "/Applications/Burp Suite Professional.app/Contents/Resources/app" && "/Applications/Burp Suite Professional.app/Contents/Resources/jre.bundle/Contents/Home/bin/java" -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+IgnoreUnrecognizedVMOptions -javaagent:BurpKeygenCN.jar=hanzify --add-opens=java.desktop/javax.swing=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED -Dfile.encoding=UTF-8 -noverify --enable-native-access=ALL-UNNAMED -jar burpsuite_pro.jar'
+alias ghidra='/opt/homebrew/opt/ghidra/bin/ghidraRun'
+
 
 # pnpm
 export PNPM_HOME="/Users/zsm/Library/pnpm"
 case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
+  *":$PNPM_HOME/bin:"*) ;; # 注意这里增加了 /bin
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;; # 确保 bin 目录在最前面
 esac
 # pnpm end
