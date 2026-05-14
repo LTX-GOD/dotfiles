@@ -1,13 +1,16 @@
 return {
   '3rd/image.nvim',
+  build = false,
   -- 在 markdown 和 tex 文件类型中启用
   ft = { 'markdown' },
   config = function()
+    local has_magick_rock = pcall(require, 'magick')
+
     require('image').setup({
       -- 使用 kitty 后端进行图片渲染
       backend = 'kitty',
       -- 图片处理器配置
-      processor = 'magick_rock', -- 使用 magick rock，性能更好且已安装
+      processor = has_magick_rock and 'magick_rock' or 'magick_cli',
       -- 集成配置
       integrations = {
         markdown = {

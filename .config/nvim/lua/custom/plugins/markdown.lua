@@ -17,8 +17,8 @@ return { {
             copy_images = true,
             prompt_for_file_name = false,
             file_name = '%y%m%d-%H%M%S',
-            extension = 'avif',
-            process_cmd = 'magick convert - -quality 75 avif:-'
+            extension = 'webp',
+            process_cmd = 'magick png:- -quality 80 webp:-'
         },
         filetypes = {
             markdown = {

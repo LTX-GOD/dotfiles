@@ -133,28 +133,6 @@ require('snacks').setup {
         math = {
             enabled = true,
         },
-        resolve = function(_, src)
-            local vault_path = vim.fn.expand '~' ..
-                '/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian Vault'
-
-            -- when the file path is *attachments/*
-            local att_path = src:match '(attachments/.*)'
-            if att_path then
-                return vault_path .. '/' .. att_path
-            end
-
-            -- when the file path is pure basename without any directory component
-            if not src:match '[/\\]' then
-                return vault_path .. '/attachments/' .. src
-            end
-
-            -- when the file path is absolute path
-            if src:match '^/' then
-                return src
-            end
-
-            return src
-        end
     },
     indent = {
         indent = {
