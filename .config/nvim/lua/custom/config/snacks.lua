@@ -1,10 +1,13 @@
 ---@diagnostic disable: missing-fields
+local total_plugins = #vim.pack.get(nil, { info = false })
+
 require('snacks').setup {
     notifier = {},
     bufdelete = {},
     git = {},
     rename = {},
     picker = {
+        ui_select = true,
         matcher = {
             frecency = true,
             cwd_bonus = true,
@@ -58,10 +61,9 @@ require('snacks').setup {
                 section = 'session'
             }, {
                 icon = '󰒲 ',
-                key = 'L',
-                desc = 'Lazy',
-                action = ':Lazy',
-                enabled = package.loaded.lazy ~= nil
+                key = 'p',
+                desc = 'Pack Update',
+                action = ':PackUpdate'
             }, {
                 icon = ' ',
                 key = 'q',
@@ -92,7 +94,15 @@ require('snacks').setup {
         sections = {
             { section = "header" },
             { section = "keys",   gap = 1, padding = 1 },
-            { section = "startup" },
+            {
+                align = "center",
+                padding = 1,
+                text = {
+                    { "󰏖 ", hl = "icon" },
+                    { tostring(total_plugins), hl = "special" },
+                    { " plugins managed by vim.pack", hl = "footer" },
+                },
+            },
             {
                 pane = 2,
                 section = "terminal",

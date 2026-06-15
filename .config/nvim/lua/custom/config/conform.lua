@@ -1,3 +1,22 @@
+local function has_exec(cmd)
+  return vim.fn.executable(cmd) == 1
+end
+
+local markdown_formatters = { 'cbfmt' }
+if has_exec 'prettierd' then
+  table.insert(markdown_formatters, 1, 'prettierd')
+end
+
+local json_formatters = {}
+if has_exec 'prettierd' then
+  json_formatters = { 'prettierd' }
+end
+
+local snakemake_formatters = {}
+if has_exec 'snakefmt' then
+  snakemake_formatters = { 'snakefmt' }
+end
+
 return {
   notify_on_error = true,
   format_on_save = function(bufnr)
@@ -12,9 +31,9 @@ return {
   formatters_by_ft = {
     cpp = { 'clang-format' },
     python = { 'ruff_fix', 'ruff_format' },
-    snakemake = { 'snakefmt' },
-    markdown = { 'prettierd', 'cbfmt' },
-    json = { 'prettierd' },
+    snakemake = snakemake_formatters,
+    markdown = markdown_formatters,
+    json = json_formatters,
     toml = { 'taplo' },
     go = { 'gofmt', 'goimports' },
   },

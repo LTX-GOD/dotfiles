@@ -41,6 +41,9 @@ return {
           return ''
         end,
       },
+      {
+        require 'minuet.lualine',
+      },
       'encoding',
       'filetype',
     },
@@ -60,7 +63,6 @@ return {
     'quickfix',
     'nvim-tree',
     'neo-tree',
-    'lazy',
     'toggleterm',
     'symbols-outline',
     'aerial',

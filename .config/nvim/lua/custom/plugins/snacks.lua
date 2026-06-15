@@ -1,6 +1,6 @@
 return {
   'folke/snacks.nvim',
-  lazy = false,
+  eager = true,
   config = function()
     require 'custom.config.snacks'
 
@@ -8,7 +8,6 @@ return {
       vim.keymap.set('n', key, func, { desc = desc })
     end
 
-    -- all keymaps for snacks.picker
     map('<leader>ff', Snacks.picker.smart, 'Smart find file')
     map('<leader>fo', Snacks.picker.recent, 'Find recent file')
     map('<leader>fw', Snacks.picker.grep, 'Find content')
@@ -43,9 +42,6 @@ return {
       local picker_opts = {
         layout = 'left',
         tree = true,
-        -- on_show = function()
-        --   vim.cmd.stopinsert()
-        -- end,
       }
       if has_lsp_symbols() then
         Snacks.picker.lsp_symbols(picker_opts)
@@ -84,7 +80,6 @@ return {
       end
     end, 'Find todo')
 
-    -- other snacks features
     map('<leader>bc', Snacks.bufdelete.delete, 'Delete buffers')
     map('<leader>bC', Snacks.bufdelete.other, 'Delete other buffers')
     map('<leader>gg', function()

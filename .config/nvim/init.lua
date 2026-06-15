@@ -2,4 +2,4 @@ require 'custom.options'
 require 'custom.keymaps'
 require 'custom.autocmds'
 require 'custom.filetypes'
-require 'custom.lazy'
+require('custom.pack').setup()

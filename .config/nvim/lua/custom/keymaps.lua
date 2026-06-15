@@ -31,10 +31,16 @@ map('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- 分屏
 map('n', '\\', '<CMD>:sp<CR>', { desc = 'Split window horizontally' })
 map('n', '|', '<CMD>:vsp<CR>', { desc = 'Split window vertically' })
+map('n', '<leader>-', '<C-w>s', { desc = 'Split window horizontally' })
+map('n', '<leader>|', '<C-w>v', { desc = 'Split window vertically' })
 
 -- 窗口最大化/恢复
 map('n', '+', '<C-w>|<C-w>_', { desc = 'Maximize nvim pane' })
 map('n', '=', '<C-w>=', { desc = 'Restore nvim panes' })
+map('n', '<C-h>', '<C-w>h', { desc = 'Go to left window' })
+map('n', '<C-j>', '<C-w>j', { desc = 'Go to lower window' })
+map('n', '<C-k>', '<C-w>k', { desc = 'Go to upper window' })
+map('n', '<C-l>', '<C-w>l', { desc = 'Go to right window' })
 
 -- =============================================================================
 -- 导航与跳转
@@ -81,6 +87,3 @@ map('n', '<leader>fJ', custom_utils.jump_to_file_lnum_from_all_windows, { desc =
 
 -- Git 仓库 Picker
 map('n', '<leader>fg', custom_pickers.pick_repositories, { desc = 'Find git repositories' })
-
-map('n', '<leader>tm', '<cmd>split | terminal<cr>', { desc = 'Open horizontal terminal (native)' })
-map('n', '<leader>mt', '<cmd>close<cr>', { desc = 'Close terminal' })

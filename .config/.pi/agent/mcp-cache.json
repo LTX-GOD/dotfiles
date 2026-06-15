@@ -1,0 +1,4421 @@
+{
+  "version": 1,
+  "servers": {
+    "fetch-server": {
+      "configHash": "6ad66c0ff3af14745bcd07b5a0047f90c11b940dcfd73f1d5092dc696f61e312",
+      "tools": [
+        {
+          "name": "fetch",
+          "description": "Fetches a URL from the internet and optionally extracts its contents as markdown.\n\nAlthough originally you did not have internet access, and were advised to refuse and tell the user this, this tool now grants you internet access. Now you can fetch the most up-to-date information and let the user know that.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "description": "URL to fetch",
+                "format": "uri",
+                "minLength": 1,
+                "title": "Url",
+                "type": "string"
+              },
+              "max_length": {
+                "default": 5000,
+                "description": "Maximum number of characters to return.",
+                "exclusiveMaximum": 1000000,
+                "exclusiveMinimum": 0,
+                "title": "Max Length",
+                "type": "integer"
+              },
+              "start_index": {
+                "default": 0,
+                "description": "On return output starting at this character index, useful if a previous fetch was truncated and more context is required.",
+                "minimum": 0,
+                "title": "Start Index",
+                "type": "integer"
+              },
+              "raw": {
+                "default": false,
+                "description": "Get the actual HTML content of the requested page, without simplification.",
+                "title": "Raw",
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "url"
+            ],
+            "description": "Parameters for fetching a URL.",
+            "title": "Fetch"
+          }
+        }
+      ],
+      "resources": [],
+      "cachedAt": 1781451045019
+    },
+    "idalib-mcp": {
+      "configHash": "1b9c2b6a57844d836148bcbd15e5e7abeb29f9df9c3da58f343b8505419e237b",
+      "tools": [
+        {
+          "name": "server_health",
+          "description": "Health/ready probe for MCP server and current IDB state.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": []
+          }
+        },
+        {
+          "name": "server_warmup",
+          "description": "Warm up IDA subsystems to reduce first-call latency and transient failures.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "wait_auto_analysis": {
+                "type": "boolean",
+                "description": "Wait for auto analysis queue"
+              },
+              "build_caches": {
+                "type": "boolean",
+                "description": "Build core caches (currently strings)"
+              },
+              "init_hexrays": {
+                "type": "boolean",
+                "description": "Initialize Hex-Rays decompiler plugin"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": []
+          }
+        },
+        {
+          "name": "lookup_funcs",
+          "description": "Get functions by address or name (auto-detects)",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "description": "Address(es) or name(s)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "queries"
+            ]
+          }
+        },
+        {
+          "name": "int_convert",
+          "description": "Convert numbers to different formats",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "inputs": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "text": {
+                          "type": "string",
+                          "description": "Number string to convert"
+                        },
+                        "size": {
+                          "type": "integer",
+                          "description": "Byte size for conversion (omit for auto)"
+                        }
+                      },
+                      "required": [],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "text": {
+                        "type": "string",
+                        "description": "Number string to convert"
+                      },
+                      "size": {
+                        "type": "integer",
+                        "description": "Byte size for conversion (omit for auto)"
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                  }
+                ],
+                "description": "Convert numbers to various formats (hex, decimal, binary, ascii)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "inputs"
+            ]
+          }
+        },
+        {
+          "name": "list_funcs",
+          "description": "List functions with optional filtering and offset/count pagination.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "filter": {
+                          "type": "string",
+                          "description": "Glob filter"
+                        },
+                        "offset": {
+                          "type": "integer",
+                          "description": "Start index"
+                        },
+                        "count": {
+                          "type": "integer",
+                          "description": "Max results (0=all)"
+                        }
+                      },
+                      "required": [],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "filter": {
+                        "type": "string",
+                        "description": "Glob filter"
+                      },
+                      "offset": {
+                        "type": "integer",
+                        "description": "Start index"
+                      },
+                      "count": {
+                        "type": "integer",
+                        "description": "Max results (0=all)"
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                  }
+                ],
+                "description": "List functions with optional filtering and pagination"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "queries"
+            ]
+          }
+        },
+        {
+          "name": "func_query",
+          "description": "Query functions with richer filtering than list_funcs.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "filter": {
+                          "type": "string",
+                          "description": "Name glob/regex"
+                        },
+                        "name_regex": {
+                          "type": "string",
+                          "description": "Name regex"
+                        },
+                        "min_size": {
+                          "type": "integer",
+                          "description": "Min size in bytes"
+                        },
+                        "max_size": {
+                          "type": "integer",
+                          "description": "Max size in bytes"
+                        },
+                        "has_type": {
+                          "type": "boolean",
+                          "description": "Require type info"
+                        },
+                        "offset": {
+                          "type": "integer",
+                          "description": "Start index"
+                        },
+                        "count": {
+                          "type": "integer",
+                          "description": "Max results (0=all)"
+                        },
+                        "sort_by": {
+                          "type": "string",
+                          "description": "Sort: addr|name|size"
+                        },
+                        "descending": {
+                          "type": "boolean",
+                          "description": "Descending"
+                        }
+                      },
+                      "required": [],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "filter": {
+                        "type": "string",
+                        "description": "Name glob/regex"
+                      },
+                      "name_regex": {
+                        "type": "string",
+                        "description": "Name regex"
+                      },
+                      "min_size": {
+                        "type": "integer",
+                        "description": "Min size in bytes"
+                      },
+                      "max_size": {
+                        "type": "integer",
+                        "description": "Max size in bytes"
+                      },
+                      "has_type": {
+                        "type": "boolean",
+                        "description": "Require type info"
+                      },
+                      "offset": {
+                        "type": "integer",
+                        "description": "Start index"
+                      },
+                      "count": {
+                        "type": "integer",
+                        "description": "Max results (0=all)"
+                      },
+                      "sort_by": {
+                        "type": "string",
+                        "description": "Sort: addr|name|size"
+                      },
+                      "descending": {
+                        "type": "boolean",
+                        "description": "Descending"
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                  }
+                ],
+                "description": "Richer function query (size/type/name filters + pagination)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "queries"
+            ]
+          }
+        },
+        {
+          "name": "list_globals",
+          "description": "List globals with optional filtering and offset/count pagination.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "filter": {
+                          "type": "string",
+                          "description": "Glob filter"
+                        },
+                        "offset": {
+                          "type": "integer",
+                          "description": "Start index"
+                        },
+                        "count": {
+                          "type": "integer",
+                          "description": "Max results (0=all)"
+                        }
+                      },
+                      "required": [],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "filter": {
+                        "type": "string",
+                        "description": "Glob filter"
+                      },
+                      "offset": {
+                        "type": "integer",
+                        "description": "Start index"
+                      },
+                      "count": {
+                        "type": "integer",
+                        "description": "Max results (0=all)"
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                  }
+                ],
+                "description": "List global variables with optional filtering and pagination"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "queries"
+            ]
+          }
+        },
+        {
+          "name": "entity_query",
+          "description": "Query IDB entities with typed filters, projection, and pagination.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "kind": {
+                          "type": "string",
+                          "description": "functions|globals|imports|strings|names"
+                        },
+                        "filter": {
+                          "type": "string",
+                          "description": "Glob/regex filter"
+                        },
+                        "regex": {
+                          "type": "string",
+                          "description": "Regex on primary text field"
+                        },
+                        "min_addr": {
+                          "type": "string",
+                          "description": "Min address bound"
+                        },
+                        "max_addr": {
+                          "type": "string",
+                          "description": "Max address bound"
+                        },
+                        "segment": {
+                          "type": "string",
+                          "description": "Segment filter"
+                        },
+                        "module": {
+                          "type": "string",
+                          "description": "Import module filter"
+                        },
+                        "offset": {
+                          "type": "integer",
+                          "description": "Start index"
+                        },
+                        "count": {
+                          "type": "integer",
+                          "description": "Max results (0=all)"
+                        },
+                        "sort_by": {
+                          "type": "string",
+                          "description": "Sort: addr|name|size|length"
+                        },
+                        "descending": {
+                          "type": "boolean",
+                          "description": "Descending"
+                        },
+                        "fields": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Projection field list"
+                        }
+                      },
+                      "required": [
+                        "kind"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "description": "functions|globals|imports|strings|names"
+                      },
+                      "filter": {
+                        "type": "string",
+                        "description": "Glob/regex filter"
+                      },
+                      "regex": {
+                        "type": "string",
+                        "description": "Regex on primary text field"
+                      },
+                      "min_addr": {
+                        "type": "string",
+                        "description": "Min address bound"
+                      },
+                      "max_addr": {
+                        "type": "string",
+                        "description": "Max address bound"
+                      },
+                      "segment": {
+                        "type": "string",
+                        "description": "Segment filter"
+                      },
+                      "module": {
+                        "type": "string",
+                        "description": "Import module filter"
+                      },
+                      "offset": {
+                        "type": "integer",
+                        "description": "Start index"
+                      },
+                      "count": {
+                        "type": "integer",
+                        "description": "Max results (0=all)"
+                      },
+                      "sort_by": {
+                        "type": "string",
+                        "description": "Sort: addr|name|size|length"
+                      },
+                      "descending": {
+                        "type": "boolean",
+                        "description": "Descending"
+                      },
+                      "fields": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "description": "Projection field list"
+                      }
+                    },
+                    "required": [
+                      "kind"
+                    ],
+                    "additionalProperties": false
+                  }
+                ],
+                "description": "Generic entity query with filtering, projection, and pagination"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "queries"
+            ]
+          }
+        },
+        {
+          "name": "imports",
+          "description": "List imports with module names using offset/count pagination.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "offset": {
+                "type": "integer",
+                "description": "Starting pagination index (default: 0)"
+              },
+              "count": {
+                "type": "integer",
+                "description": "Maximum rows (0 returns all imports)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "offset",
+              "count"
+            ]
+          }
+        },
+        {
+          "name": "imports_query",
+          "description": "Query imports with richer filtering than imports(offset,count).",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "filter": {
+                          "type": "string",
+                          "description": "Name glob/regex"
+                        },
+                        "module": {
+                          "type": "string",
+                          "description": "Module glob/regex"
+                        },
+                        "offset": {
+                          "type": "integer",
+                          "description": "Start index"
+                        },
+                        "count": {
+                          "type": "integer",
+                          "description": "Max results (0=all)"
+                        }
+                      },
+                      "required": [],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "filter": {
+                        "type": "string",
+                        "description": "Name glob/regex"
+                      },
+                      "module": {
+                        "type": "string",
+                        "description": "Module glob/regex"
+                      },
+                      "offset": {
+                        "type": "integer",
+                        "description": "Start index"
+                      },
+                      "count": {
+                        "type": "integer",
+                        "description": "Max results (0=all)"
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                  }
+                ],
+                "description": "Import query with import/module filters and pagination"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "queries"
+            ]
+          }
+        },
+        {
+          "name": "idb_save",
+          "description": "Save active IDB to disk, optionally to a provided path.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "Optional destination path (default: current IDB path)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": []
+          }
+        },
+        {
+          "name": "find_regex",
+          "description": "Search strings by case-insensitive regex with offset/limit pagination.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "pattern": {
+                "type": "string",
+                "description": "Regex pattern to search for in strings"
+              },
+              "limit": {
+                "type": "integer",
+                "description": "Max matches (default: 30, max: 500)"
+              },
+              "offset": {
+                "type": "integer",
+                "description": "Skip first N matches (default: 0)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "pattern"
+            ]
+          }
+        },
+        {
+          "name": "search_text",
+          "description": "Search the rendered listing using IDA's native text search (fast C++ scan).\n\nDiscovers candidate EAs with `ida_search.find_text()`, then renders each hit\nonce via `ida_lines.generate_disassembly()` to extract matching lines and\nclassify them as disasm or comment. Returns one hit per EA.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "pattern": {
+                "type": "string",
+                "description": "Text to search for in the rendered listing (literal substring by default)"
+              },
+              "limit": {
+                "type": "integer",
+                "description": "Max hits per page (default: 30, max: 500)"
+              },
+              "start": {
+                "type": "string",
+                "description": "Cursor: address to resume from (hex or symbol). Empty = first segment."
+              },
+              "regex": {
+                "type": "boolean",
+                "description": "Treat pattern as a regex (uses IDA's SEARCH_REGEX)"
+              },
+              "case_sensitive": {
+                "type": "boolean",
+                "description": "Case-sensitive match (default: false)"
+              },
+              "include": {
+                "type": "string",
+                "description": "'disasm' | 'comments' | 'all' (default: all)"
+              },
+              "code_only": {
+                "type": "boolean",
+                "description": "Restrict search to executable segments (default: true)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "pattern"
+            ]
+          }
+        },
+        {
+          "name": "decompile",
+          "description": "Decompile function(s) at address(es); returns pseudocode and per-item errors.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "addr": {
+                "type": "string",
+                "description": "Function address or name to decompile"
+              },
+              "include_addresses": {
+                "type": "boolean",
+                "description": "Append /*0xNNNN*/ markers per line (default: true). Set false to save tokens."
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "addr"
+            ]
+          }
+        },
+        {
+          "name": "disasm",
+          "description": "Disassemble function with offset/max_instructions pagination and optional total count.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "addr": {
+                "type": "string",
+                "description": "Function address or name to disassemble"
+              },
+              "max_instructions": {
+                "type": "integer",
+                "description": "Max instructions per function (default: 5000, max: 50000)"
+              },
+              "offset": {
+                "type": "integer",
+                "description": "Skip first N instructions (default: 0)"
+              },
+              "include_total": {
+                "type": "boolean",
+                "description": "Compute total instruction count (default: false)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "addr"
+            ]
+          }
+        },
+        {
+          "name": "func_profile",
+          "description": "Profile functions with summary metrics and optional sampled details.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "addr": {
+                          "type": "string",
+                          "description": "Function address or name (omit or '*' for all)"
+                        },
+                        "filter": {
+                          "type": "string",
+                          "description": "Name glob/regex"
+                        },
+                        "offset": {
+                          "type": "integer",
+                          "description": "Start index"
+                        },
+                        "count": {
+                          "type": "integer",
+                          "description": "Max results (0=all)"
+                        },
+                        "sort_by": {
+                          "type": "string",
+                          "description": "Sort: addr|name|size"
+                        },
+                        "descending": {
+                          "type": "boolean",
+                          "description": "Descending"
+                        },
+                        "include_lists": {
+                          "type": "boolean",
+                          "description": "Include callers/callees/strings/constants"
+                        },
+                        "max_items": {
+                          "type": "integer",
+                          "description": "Max items per list"
+                        },
+                        "include_prototype": {
+                          "type": "boolean",
+                          "description": "Include prototype"
+                        }
+                      },
+                      "required": [],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "addr": {
+                        "type": "string",
+                        "description": "Function address or name (omit or '*' for all)"
+                      },
+                      "filter": {
+                        "type": "string",
+                        "description": "Name glob/regex"
+                      },
+                      "offset": {
+                        "type": "integer",
+                        "description": "Start index"
+                      },
+                      "count": {
+                        "type": "integer",
+                        "description": "Max results (0=all)"
+                      },
+                      "sort_by": {
+                        "type": "string",
+                        "description": "Sort: addr|name|size"
+                      },
+                      "descending": {
+                        "type": "boolean",
+                        "description": "Descending"
+                      },
+                      "include_lists": {
+                        "type": "boolean",
+                        "description": "Include callers/callees/strings/constants"
+                      },
+                      "max_items": {
+                        "type": "integer",
+                        "description": "Max items per list"
+                      },
+                      "include_prototype": {
+                        "type": "boolean",
+                        "description": "Include prototype"
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                  }
+                ],
+                "description": "Function profiling query (supports name/address filters + pagination)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "queries"
+            ]
+          }
+        },
+        {
+          "name": "analyze_batch",
+          "description": "Run comprehensive analysis over one or more target functions.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "addr": {
+                          "type": "string",
+                          "description": "Function address or name"
+                        },
+                        "include_decompile": {
+                          "type": "boolean",
+                          "description": "Include decompiler output"
+                        },
+                        "include_disasm": {
+                          "type": "boolean",
+                          "description": "Include disassembly"
+                        },
+                        "include_xrefs": {
+                          "type": "boolean",
+                          "description": "Include xrefs-to/from"
+                        },
+                        "include_callers": {
+                          "type": "boolean",
+                          "description": "Include callers"
+                        },
+                        "include_callees": {
+                          "type": "boolean",
+                          "description": "Include callees"
+                        },
+                        "include_strings": {
+                          "type": "boolean",
+                          "description": "Include strings"
+                        },
+                        "include_constants": {
+                          "type": "boolean",
+                          "description": "Include constants"
+                        },
+                        "include_basic_blocks": {
+                          "type": "boolean",
+                          "description": "Include basic blocks"
+                        },
+                        "include_proto": {
+                          "type": "boolean",
+                          "description": "Include prototype"
+                        },
+                        "max_disasm_insns": {
+                          "type": "integer",
+                          "description": "Max disasm instructions"
+                        },
+                        "max_callers": {
+                          "type": "integer",
+                          "description": "Max callers"
+                        },
+                        "max_callees": {
+                          "type": "integer",
+                          "description": "Max callees"
+                        },
+                        "max_strings": {
+                          "type": "integer",
+                          "description": "Max strings"
+                        },
+                        "max_constants": {
+                          "type": "integer",
+                          "description": "Max constants"
+                        },
+                        "max_blocks": {
+                          "type": "integer",
+                          "description": "Max blocks"
+                        }
+                      },
+                      "required": [
+                        "addr"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "addr": {
+                        "type": "string",
+                        "description": "Function address or name"
+                      },
+                      "include_decompile": {
+                        "type": "boolean",
+                        "description": "Include decompiler output"
+                      },
+                      "include_disasm": {
+                        "type": "boolean",
+                        "description": "Include disassembly"
+                      },
+                      "include_xrefs": {
+                        "type": "boolean",
+                        "description": "Include xrefs-to/from"
+                      },
+                      "include_callers": {
+                        "type": "boolean",
+                        "description": "Include callers"
+                      },
+                      "include_callees": {
+                        "type": "boolean",
+                        "description": "Include callees"
+                      },
+                      "include_strings": {
+                        "type": "boolean",
+                        "description": "Include strings"
+                      },
+                      "include_constants": {
+                        "type": "boolean",
+                        "description": "Include constants"
+                      },
+                      "include_basic_blocks": {
+                        "type": "boolean",
+                        "description": "Include basic blocks"
+                      },
+                      "include_proto": {
+                        "type": "boolean",
+                        "description": "Include prototype"
+                      },
+                      "max_disasm_insns": {
+                        "type": "integer",
+                        "description": "Max disasm instructions"
+                      },
+                      "max_callers": {
+                        "type": "integer",
+                        "description": "Max callers"
+                      },
+                      "max_callees": {
+                        "type": "integer",
+                        "description": "Max callees"
+                      },
+                      "max_strings": {
+                        "type": "integer",
+                        "description": "Max strings"
+                      },
+                      "max_constants": {
+                        "type": "integer",
+                        "description": "Max constants"
+                      },
+                      "max_blocks": {
+                        "type": "integer",
+                        "description": "Max blocks"
+                      }
+                    },
+                    "required": [
+                      "addr"
+                    ],
+                    "additionalProperties": false
+                  }
+                ],
+                "description": "Comprehensive per-function analysis with selectable sections"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "queries"
+            ]
+          }
+        },
+        {
+          "name": "xrefs_to",
+          "description": "Return xrefs to address(es) or named symbols, capped per target with truncation flag.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "addrs": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "description": "Addresses or function names to find cross-references to (e.g. '0x11a9', 'check_pw', 'main')"
+              },
+              "limit": {
+                "type": "integer",
+                "description": "Max xrefs per address (default: 100, max: 1000)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "addrs"
+            ]
+          }
+        },
+        {
+          "name": "xref_query",
+          "description": "Query xrefs with direction/type filters and pagination.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "addr": {
+                          "type": "string",
+                          "description": "Address or name"
+                        },
+                        "direction": {
+                          "type": "string",
+                          "description": "to|from|both (default: both)"
+                        },
+                        "xref_type": {
+                          "type": "string",
+                          "description": "any|code|data (default: any)"
+                        },
+                        "offset": {
+                          "type": "integer",
+                          "description": "Start index (default: 0)"
+                        },
+                        "count": {
+                          "type": "integer",
+                          "description": "Max results (default: 200, max: 5000)"
+                        },
+                        "include_fn": {
+                          "type": "boolean",
+                          "description": "Include function metadata"
+                        },
+                        "dedup": {
+                          "type": "boolean",
+                          "description": "Deduplicate by addr/type"
+                        },
+                        "sort_by": {
+                          "type": "string",
+                          "description": "Sort: addr|type"
+                        },
+                        "descending": {
+                          "type": "boolean",
+                          "description": "Descending"
+                        }
+                      },
+                      "required": [
+                        "addr"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "addr": {
+                        "type": "string",
+                        "description": "Address or name"
+                      },
+                      "direction": {
+                        "type": "string",
+                        "description": "to|from|both (default: both)"
+                      },
+                      "xref_type": {
+                        "type": "string",
+                        "description": "any|code|data (default: any)"
+                      },
+                      "offset": {
+                        "type": "integer",
+                        "description": "Start index (default: 0)"
+                      },
+                      "count": {
+                        "type": "integer",
+                        "description": "Max results (default: 200, max: 5000)"
+                      },
+                      "include_fn": {
+                        "type": "boolean",
+                        "description": "Include function metadata"
+                      },
+                      "dedup": {
+                        "type": "boolean",
+                        "description": "Deduplicate by addr/type"
+                      },
+                      "sort_by": {
+                        "type": "string",
+                        "description": "Sort: addr|type"
+                      },
+                      "descending": {
+                        "type": "boolean",
+                        "description": "Descending"
+                      }
+                    },
+                    "required": [
+                      "addr"
+                    ],
+                    "additionalProperties": false
+                  }
+                ],
+                "description": "Generic xref query with direction/type filters and pagination"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "queries"
+            ]
+          }
+        },
+        {
+          "name": "xrefs_to_field",
+          "description": "Get cross-references to structure fields",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "struct": {
+                          "type": "string",
+                          "description": "Structure name"
+                        },
+                        "field": {
+                          "type": "string",
+                          "description": "Field name"
+                        }
+                      },
+                      "required": [
+                        "struct",
+                        "field"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "struct": {
+                        "type": "string",
+                        "description": "Structure name"
+                      },
+                      "field": {
+                        "type": "string",
+                        "description": "Field name"
+                      }
+                    },
+                    "required": [
+                      "struct",
+                      "field"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "queries"
+            ]
+          }
+        },
+        {
+          "name": "callees",
+          "description": "Return unique callees per function, capped by limit.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "addrs": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "description": "Function addresses or names to get callees for (e.g. '0x123e', 'main')"
+              },
+              "limit": {
+                "type": "integer",
+                "description": "Max callees per function (default: 200, max: 500)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "addrs"
+            ]
+          }
+        },
+        {
+          "name": "find_bytes",
+          "description": "Search byte patterns (supports ??) with offset/limit pagination.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "patterns": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "description": "Byte patterns to search for (e.g. '48 8B ?? ??')"
+              },
+              "limit": {
+                "type": "integer",
+                "description": "Max matches per pattern (default: 1000, max: 10000)"
+              },
+              "offset": {
+                "type": "integer",
+                "description": "Skip first N matches (default: 0)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "patterns"
+            ]
+          }
+        },
+        {
+          "name": "basic_blocks",
+          "description": "Return function CFG blocks with offset/max_blocks pagination.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "addrs": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "description": "Function addresses or names to get basic blocks for (e.g. '0x123e', 'main')"
+              },
+              "max_blocks": {
+                "type": "integer",
+                "description": "Max basic blocks per function (default: 1000, max: 10000)"
+              },
+              "offset": {
+                "type": "integer",
+                "description": "Skip first N blocks (default: 0)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "addrs"
+            ]
+          }
+        },
+        {
+          "name": "find",
+          "description": "Search strings/immediates/refs for targets with offset/limit pagination.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Search type: 'string', 'immediate', 'data_ref', or 'code_ref'"
+              },
+              "targets": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "integer"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "integer"
+                  }
+                ],
+                "description": "Search targets (strings, integers, or addresses)"
+              },
+              "limit": {
+                "type": "integer",
+                "description": "Max matches per target (default: 1000, max: 10000)"
+              },
+              "offset": {
+                "type": "integer",
+                "description": "Skip first N matches (default: 0)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "type",
+              "targets"
+            ]
+          }
+        },
+        {
+          "name": "insn_query",
+          "description": "Query instructions with mnemonic/operand filters and scoped scans.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "mnem": {
+                          "type": "string",
+                          "description": "Mnemonic to match"
+                        },
+                        "op0": {
+                          "type": "integer",
+                          "description": "Match first operand"
+                        },
+                        "op1": {
+                          "type": "integer",
+                          "description": "Match second operand"
+                        },
+                        "op2": {
+                          "type": "integer",
+                          "description": "Match third operand"
+                        },
+                        "op_any": {
+                          "type": "integer",
+                          "description": "Match any operand"
+                        },
+                        "func": {
+                          "type": "string",
+                          "description": "Scope: function address"
+                        },
+                        "segment": {
+                          "type": "string",
+                          "description": "Scope: segment name"
+                        },
+                        "start": {
+                          "type": "string",
+                          "description": "Scope: start address"
+                        },
+                        "end": {
+                          "type": "string",
+                          "description": "Scope: end address (exclusive)"
+                        },
+                        "offset": {
+                          "type": "integer",
+                          "description": "Start index"
+                        },
+                        "count": {
+                          "type": "integer",
+                          "description": "Max matches (max: 5000)"
+                        },
+                        "max_scan_insns": {
+                          "type": "integer",
+                          "description": "Max instructions to scan"
+                        },
+                        "include_fn": {
+                          "type": "boolean",
+                          "description": "Include function metadata"
+                        },
+                        "include_disasm": {
+                          "type": "boolean",
+                          "description": "Include disassembly text"
+                        },
+                        "allow_broad": {
+                          "type": "boolean",
+                          "description": "Allow scopeless scan"
+                        }
+                      },
+                      "required": [],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "mnem": {
+                        "type": "string",
+                        "description": "Mnemonic to match"
+                      },
+                      "op0": {
+                        "type": "integer",
+                        "description": "Match first operand"
+                      },
+                      "op1": {
+                        "type": "integer",
+                        "description": "Match second operand"
+                      },
+                      "op2": {
+                        "type": "integer",
+                        "description": "Match third operand"
+                      },
+                      "op_any": {
+                        "type": "integer",
+                        "description": "Match any operand"
+                      },
+                      "func": {
+                        "type": "string",
+                        "description": "Scope: function address"
+                      },
+                      "segment": {
+                        "type": "string",
+                        "description": "Scope: segment name"
+                      },
+                      "start": {
+                        "type": "string",
+                        "description": "Scope: start address"
+                      },
+                      "end": {
+                        "type": "string",
+                        "description": "Scope: end address (exclusive)"
+                      },
+                      "offset": {
+                        "type": "integer",
+                        "description": "Start index"
+                      },
+                      "count": {
+                        "type": "integer",
+                        "description": "Max matches (max: 5000)"
+                      },
+                      "max_scan_insns": {
+                        "type": "integer",
+                        "description": "Max instructions to scan"
+                      },
+                      "include_fn": {
+                        "type": "boolean",
+                        "description": "Include function metadata"
+                      },
+                      "include_disasm": {
+                        "type": "boolean",
+                        "description": "Include disassembly text"
+                      },
+                      "allow_broad": {
+                        "type": "boolean",
+                        "description": "Allow scopeless scan"
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                  }
+                ],
+                "description": "Instruction query with mnemonic/operand filters and scoped scan"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "queries"
+            ]
+          }
+        },
+        {
+          "name": "export_funcs",
+          "description": "Export function data for addresses in json/c_header/prototypes formats.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "addrs": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "description": "Function addresses or names to export (e.g. '0x123e', 'main')"
+              },
+              "format": {
+                "type": "string",
+                "description": "Export format: json (default), c_header, or prototypes"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "addrs"
+            ]
+          }
+        },
+        {
+          "name": "callgraph",
+          "description": "Build bounded callgraph from roots with depth/node/edge limits.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "roots": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "description": "Root function addresses to start call graph traversal from"
+              },
+              "max_depth": {
+                "type": "integer",
+                "description": "Maximum depth for call graph traversal"
+              },
+              "max_nodes": {
+                "type": "integer",
+                "description": "Max nodes across the graph (default: 1000, max: 100000)"
+              },
+              "max_edges": {
+                "type": "integer",
+                "description": "Max edges across the graph (default: 5000, max: 200000)"
+              },
+              "max_edges_per_func": {
+                "type": "integer",
+                "description": "Max edges per function (default: 200, max: 5000)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "roots"
+            ]
+          }
+        },
+        {
+          "name": "get_bytes",
+          "description": "Read bytes from memory addresses",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "regions": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "addr": {
+                          "type": "string",
+                          "description": "Address to read from (hex or decimal)"
+                        },
+                        "size": {
+                          "type": "integer",
+                          "description": "Number of bytes to read"
+                        }
+                      },
+                      "required": [
+                        "addr",
+                        "size"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "addr": {
+                        "type": "string",
+                        "description": "Address to read from (hex or decimal)"
+                      },
+                      "size": {
+                        "type": "integer",
+                        "description": "Number of bytes to read"
+                      }
+                    },
+                    "required": [
+                      "addr",
+                      "size"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "regions"
+            ]
+          }
+        },
+        {
+          "name": "get_int",
+          "description": "Read integer values from memory addresses",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "addr": {
+                          "type": "string",
+                          "description": "Address to read from (hex or decimal)"
+                        },
+                        "ty": {
+                          "type": "string",
+                          "description": "Integer class (i8/u64/i16le/i16be/etc)"
+                        }
+                      },
+                      "required": [
+                        "addr",
+                        "ty"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "addr": {
+                        "type": "string",
+                        "description": "Address to read from (hex or decimal)"
+                      },
+                      "ty": {
+                        "type": "string",
+                        "description": "Integer class (i8/u64/i16le/i16be/etc)"
+                      }
+                    },
+                    "required": [
+                      "addr",
+                      "ty"
+                    ],
+                    "additionalProperties": false
+                  }
+                ],
+                "description": "Integer read requests (ty, addr). ty: i8/u64/i16le/i16be/etc"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "queries"
+            ]
+          }
+        },
+        {
+          "name": "get_string",
+          "description": "Read strings from memory addresses",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "addrs": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "description": "Addresses to read strings from"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "addrs"
+            ]
+          }
+        },
+        {
+          "name": "get_global_value",
+          "description": "Read global variable values by address or symbol name.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "description": "Global variable addresses or names to read values from"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "queries"
+            ]
+          }
+        },
+        {
+          "name": "patch",
+          "description": "Patch bytes at memory addresses with hex data",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "patches": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "addr": {
+                          "type": "string",
+                          "description": "Address to patch (hex or decimal)"
+                        },
+                        "data": {
+                          "type": "string",
+                          "description": "Hex data to write (space-separated bytes)"
+                        }
+                      },
+                      "required": [
+                        "addr",
+                        "data"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "addr": {
+                        "type": "string",
+                        "description": "Address to patch (hex or decimal)"
+                      },
+                      "data": {
+                        "type": "string",
+                        "description": "Hex data to write (space-separated bytes)"
+                      }
+                    },
+                    "required": [
+                      "addr",
+                      "data"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "patches"
+            ]
+          }
+        },
+        {
+          "name": "put_int",
+          "description": "Write integer values to memory addresses",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "addr": {
+                          "type": "string",
+                          "description": "Address to write to (hex or decimal)"
+                        },
+                        "ty": {
+                          "type": "string",
+                          "description": "Integer class (i8/u64/i16le/i16be/etc)"
+                        },
+                        "value": {
+                          "type": "string",
+                          "description": "Integer value as string (decimal or 0x..; negatives allowed for signed)"
+                        }
+                      },
+                      "required": [
+                        "addr",
+                        "ty",
+                        "value"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "addr": {
+                        "type": "string",
+                        "description": "Address to write to (hex or decimal)"
+                      },
+                      "ty": {
+                        "type": "string",
+                        "description": "Integer class (i8/u64/i16le/i16be/etc)"
+                      },
+                      "value": {
+                        "type": "string",
+                        "description": "Integer value as string (decimal or 0x..; negatives allowed for signed)"
+                      }
+                    },
+                    "required": [
+                      "addr",
+                      "ty",
+                      "value"
+                    ],
+                    "additionalProperties": false
+                  }
+                ],
+                "description": "Integer write requests (ty, addr, value). value is a string; supports 0x.. and negatives"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "items"
+            ]
+          }
+        },
+        {
+          "name": "declare_type",
+          "description": "Declare C type definitions in local type library.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "decls": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "description": "C type declarations"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "decls"
+            ]
+          }
+        },
+        {
+          "name": "enum_upsert",
+          "description": "Create or extend local enums in an idempotent way.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Enum type name"
+                        },
+                        "members": {
+                          "anyOf": [
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "name": {
+                                    "type": "string",
+                                    "description": "Enum member name"
+                                  },
+                                  "value": {
+                                    "anyOf": [
+                                      {
+                                        "type": "integer"
+                                      },
+                                      {
+                                        "type": "string"
+                                      }
+                                    ],
+                                    "description": "Enum member value"
+                                  }
+                                },
+                                "required": [],
+                                "additionalProperties": false
+                              }
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "description": "Enum member name"
+                                },
+                                "value": {
+                                  "anyOf": [
+                                    {
+                                      "type": "integer"
+                                    },
+                                    {
+                                      "type": "string"
+                                    }
+                                  ],
+                                  "description": "Enum member value"
+                                }
+                              },
+                              "required": [],
+                              "additionalProperties": false
+                            }
+                          ],
+                          "description": "Members to upsert"
+                        },
+                        "bitfield": {
+                          "type": "boolean",
+                          "description": "Bitfield enum"
+                        }
+                      },
+                      "required": [],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Enum type name"
+                      },
+                      "members": {
+                        "anyOf": [
+                          {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "description": "Enum member name"
+                                },
+                                "value": {
+                                  "anyOf": [
+                                    {
+                                      "type": "integer"
+                                    },
+                                    {
+                                      "type": "string"
+                                    }
+                                  ],
+                                  "description": "Enum member value"
+                                }
+                              },
+                              "required": [],
+                              "additionalProperties": false
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "description": "Enum member name"
+                              },
+                              "value": {
+                                "anyOf": [
+                                  {
+                                    "type": "integer"
+                                  },
+                                  {
+                                    "type": "string"
+                                  }
+                                ],
+                                "description": "Enum member value"
+                              }
+                            },
+                            "required": [],
+                            "additionalProperties": false
+                          }
+                        ],
+                        "description": "Members to upsert"
+                      },
+                      "bitfield": {
+                        "type": "boolean",
+                        "description": "Bitfield enum"
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                  }
+                ],
+                "description": "Create enums if missing and upsert enum members without destructive replacement"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "queries"
+            ]
+          }
+        },
+        {
+          "name": "read_struct",
+          "description": "Read struct fields from memory at address; auto-detect type when possible.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "addr": {
+                          "type": "string",
+                          "description": "Address"
+                        },
+                        "struct": {
+                          "type": "string",
+                          "description": "Struct name (auto-detect if omitted)"
+                        }
+                      },
+                      "required": [],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "addr": {
+                        "type": "string",
+                        "description": "Address"
+                      },
+                      "struct": {
+                        "type": "string",
+                        "description": "Struct name (auto-detect if omitted)"
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "queries"
+            ]
+          }
+        },
+        {
+          "name": "search_structs",
+          "description": "Search local structs/unions by name pattern.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "filter": {
+                "type": "string",
+                "description": "Case-insensitive substring to search for in structure names"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "filter"
+            ]
+          }
+        },
+        {
+          "name": "type_query",
+          "description": "Query local types with structured filters/projection-friendly output.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "filter": {
+                          "type": "string",
+                          "description": "Name glob/regex"
+                        },
+                        "kind": {
+                          "type": "string",
+                          "description": "any|struct|union|enum|typedef|func|ptr|udt"
+                        },
+                        "offset": {
+                          "type": "integer",
+                          "description": "Start index"
+                        },
+                        "count": {
+                          "type": "integer",
+                          "description": "Max results (0=all)"
+                        },
+                        "sort_by": {
+                          "type": "string",
+                          "description": "Sort: name|size|ordinal"
+                        },
+                        "descending": {
+                          "type": "boolean",
+                          "description": "Descending"
+                        },
+                        "include_decl": {
+                          "type": "boolean",
+                          "description": "Include declaration text"
+                        },
+                        "include_members": {
+                          "type": "boolean",
+                          "description": "Include UDT member details"
+                        },
+                        "max_members": {
+                          "type": "integer",
+                          "description": "Max members per UDT"
+                        },
+                        "include_relationships": {
+                          "type": "boolean",
+                          "description": "Include related type names"
+                        }
+                      },
+                      "required": [],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "filter": {
+                        "type": "string",
+                        "description": "Name glob/regex"
+                      },
+                      "kind": {
+                        "type": "string",
+                        "description": "any|struct|union|enum|typedef|func|ptr|udt"
+                      },
+                      "offset": {
+                        "type": "integer",
+                        "description": "Start index"
+                      },
+                      "count": {
+                        "type": "integer",
+                        "description": "Max results (0=all)"
+                      },
+                      "sort_by": {
+                        "type": "string",
+                        "description": "Sort: name|size|ordinal"
+                      },
+                      "descending": {
+                        "type": "boolean",
+                        "description": "Descending"
+                      },
+                      "include_decl": {
+                        "type": "boolean",
+                        "description": "Include declaration text"
+                      },
+                      "include_members": {
+                        "type": "boolean",
+                        "description": "Include UDT member details"
+                      },
+                      "max_members": {
+                        "type": "integer",
+                        "description": "Max members per UDT"
+                      },
+                      "include_relationships": {
+                        "type": "boolean",
+                        "description": "Include related type names"
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                  }
+                ],
+                "description": "Type catalog query with filtering, pagination, and optional relationships"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "queries"
+            ]
+          }
+        },
+        {
+          "name": "type_inspect",
+          "description": "Inspect named types (size/kind/declaration/members).",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "queries": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Type name"
+                        },
+                        "include_members": {
+                          "type": "boolean",
+                          "description": "Include UDT member details"
+                        },
+                        "max_members": {
+                          "type": "integer",
+                          "description": "Max members"
+                        }
+                      },
+                      "required": [
+                        "name"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "Type name"
+                      },
+                      "include_members": {
+                        "type": "boolean",
+                        "description": "Include UDT member details"
+                      },
+                      "max_members": {
+                        "type": "integer",
+                        "description": "Max members"
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ],
+                    "additionalProperties": false
+                  }
+                ],
+                "description": "Inspect named types and optionally include member layout"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "queries"
+            ]
+          }
+        },
+        {
+          "name": "set_type",
+          "description": "Apply types (function/global/local/stack)",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "edits": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "addr": {
+                          "type": "string",
+                          "description": "Address (function, global, or stack frame)"
+                        },
+                        "ty": {
+                          "type": "string",
+                          "description": "Type name or declaration"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Variable/function name"
+                        },
+                        "kind": {
+                          "type": "string",
+                          "description": "Entity kind (auto-detected)"
+                        },
+                        "signature": {
+                          "type": "string",
+                          "description": "Function signature"
+                        },
+                        "variable": {
+                          "type": "string",
+                          "description": "Local variable name"
+                        }
+                      },
+                      "required": [
+                        "addr"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "addr": {
+                        "type": "string",
+                        "description": "Address (function, global, or stack frame)"
+                      },
+                      "ty": {
+                        "type": "string",
+                        "description": "Type name or declaration"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Variable/function name"
+                      },
+                      "kind": {
+                        "type": "string",
+                        "description": "Entity kind (auto-detected)"
+                      },
+                      "signature": {
+                        "type": "string",
+                        "description": "Function signature"
+                      },
+                      "variable": {
+                        "type": "string",
+                        "description": "Local variable name"
+                      }
+                    },
+                    "required": [
+                      "addr"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "edits"
+            ]
+          }
+        },
+        {
+          "name": "type_apply_batch",
+          "description": "Apply multiple type edits and return aggregate status.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "batch": {
+                "type": "object",
+                "properties": {
+                  "edits": {
+                    "anyOf": [
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "addr": {
+                              "type": "string",
+                              "description": "Address (function, global, or stack frame)"
+                            },
+                            "ty": {
+                              "type": "string",
+                              "description": "Type name or declaration"
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "Variable/function name"
+                            },
+                            "kind": {
+                              "type": "string",
+                              "description": "Entity kind (auto-detected)"
+                            },
+                            "signature": {
+                              "type": "string",
+                              "description": "Function signature"
+                            },
+                            "variable": {
+                              "type": "string",
+                              "description": "Local variable name"
+                            }
+                          },
+                          "required": [
+                            "addr"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "addr": {
+                            "type": "string",
+                            "description": "Address (function, global, or stack frame)"
+                          },
+                          "ty": {
+                            "type": "string",
+                            "description": "Type name or declaration"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "Variable/function name"
+                          },
+                          "kind": {
+                            "type": "string",
+                            "description": "Entity kind (auto-detected)"
+                          },
+                          "signature": {
+                            "type": "string",
+                            "description": "Function signature"
+                          },
+                          "variable": {
+                            "type": "string",
+                            "description": "Local variable name"
+                          }
+                        },
+                        "required": [
+                          "addr"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ],
+                    "description": "Type edits to apply"
+                  },
+                  "stop_on_error": {
+                    "type": "boolean",
+                    "description": "Stop on first failure"
+                  }
+                },
+                "required": [
+                  "edits"
+                ],
+                "additionalProperties": false,
+                "description": "Batch type edits with optional stop_on_error behavior"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "batch"
+            ]
+          }
+        },
+        {
+          "name": "infer_types",
+          "description": "Infer and apply likely types at target addresses.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "addrs": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "description": "Addresses to infer types for"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "addrs"
+            ]
+          }
+        },
+        {
+          "name": "set_comments",
+          "description": "Set comments at addresses (both disassembly and decompiler views)",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "addr": {
+                          "type": "string",
+                          "description": "Address (hex or decimal)"
+                        },
+                        "comment": {
+                          "type": "string",
+                          "description": "Comment text"
+                        }
+                      },
+                      "required": [
+                        "addr",
+                        "comment"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "addr": {
+                        "type": "string",
+                        "description": "Address (hex or decimal)"
+                      },
+                      "comment": {
+                        "type": "string",
+                        "description": "Comment text"
+                      }
+                    },
+                    "required": [
+                      "addr",
+                      "comment"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "items"
+            ]
+          }
+        },
+        {
+          "name": "append_comments",
+          "description": "Append comments at addresses, deduping exact text by default.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "addr": {
+                          "type": "string",
+                          "description": "Address (hex or decimal)"
+                        },
+                        "comment": {
+                          "type": "string",
+                          "description": "Comment text to append"
+                        },
+                        "scope": {
+                          "type": "string",
+                          "description": "auto|func|line (default: auto)"
+                        },
+                        "dedupe": {
+                          "type": "boolean",
+                          "description": "Skip if exact text already exists (default: true)"
+                        }
+                      },
+                      "required": [
+                        "addr",
+                        "comment"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "addr": {
+                        "type": "string",
+                        "description": "Address (hex or decimal)"
+                      },
+                      "comment": {
+                        "type": "string",
+                        "description": "Comment text to append"
+                      },
+                      "scope": {
+                        "type": "string",
+                        "description": "auto|func|line (default: auto)"
+                      },
+                      "dedupe": {
+                        "type": "boolean",
+                        "description": "Skip if exact text already exists (default: true)"
+                      }
+                    },
+                    "required": [
+                      "addr",
+                      "comment"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "items"
+            ]
+          }
+        },
+        {
+          "name": "patch_asm",
+          "description": "Patch assembly instructions at addresses",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "addr": {
+                          "type": "string",
+                          "description": "Address (hex or decimal)"
+                        },
+                        "asm": {
+                          "type": "string",
+                          "description": "Assembly instruction(s), semicolon-separated"
+                        }
+                      },
+                      "required": [
+                        "addr",
+                        "asm"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "addr": {
+                        "type": "string",
+                        "description": "Address (hex or decimal)"
+                      },
+                      "asm": {
+                        "type": "string",
+                        "description": "Assembly instruction(s), semicolon-separated"
+                      }
+                    },
+                    "required": [
+                      "addr",
+                      "asm"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "items"
+            ]
+          }
+        },
+        {
+          "name": "rename",
+          "description": "Batch-rename funcs/globals/locals/stack vars with dry-run options.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "batch": {
+                "type": "object",
+                "properties": {
+                  "func": {
+                    "anyOf": [
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "addr": {
+                              "type": "string",
+                              "description": "Function address (hex or decimal)"
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "New function name"
+                            }
+                          },
+                          "required": [
+                            "addr",
+                            "name"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "addr": {
+                            "type": "string",
+                            "description": "Function address (hex or decimal)"
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "New function name"
+                          }
+                        },
+                        "required": [
+                          "addr",
+                          "name"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ],
+                    "description": "Function rename operations"
+                  },
+                  "data": {
+                    "anyOf": [
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "old": {
+                              "type": "string",
+                              "description": "Current variable name"
+                            },
+                            "new": {
+                              "type": "string",
+                              "description": "New variable name"
+                            }
+                          },
+                          "required": [
+                            "old",
+                            "new"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "old": {
+                            "type": "string",
+                            "description": "Current variable name"
+                          },
+                          "new": {
+                            "type": "string",
+                            "description": "New variable name"
+                          }
+                        },
+                        "required": [
+                          "old",
+                          "new"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ],
+                    "description": "Global/data variable rename operations"
+                  },
+                  "local": {
+                    "anyOf": [
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "func_addr": {
+                              "type": "string",
+                              "description": "Function address"
+                            },
+                            "old": {
+                              "type": "string",
+                              "description": "Current variable name"
+                            },
+                            "new": {
+                              "type": "string",
+                              "description": "New variable name"
+                            }
+                          },
+                          "required": [
+                            "func_addr",
+                            "old",
+                            "new"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "func_addr": {
+                            "type": "string",
+                            "description": "Function address"
+                          },
+                          "old": {
+                            "type": "string",
+                            "description": "Current variable name"
+                          },
+                          "new": {
+                            "type": "string",
+                            "description": "New variable name"
+                          }
+                        },
+                        "required": [
+                          "func_addr",
+                          "old",
+                          "new"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ],
+                    "description": "Local variable rename operations"
+                  },
+                  "stack": {
+                    "anyOf": [
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "func_addr": {
+                              "type": "string",
+                              "description": "Function address"
+                            },
+                            "old": {
+                              "type": "string",
+                              "description": "Current variable name"
+                            },
+                            "new": {
+                              "type": "string",
+                              "description": "New variable name"
+                            }
+                          },
+                          "required": [
+                            "func_addr",
+                            "old",
+                            "new"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "func_addr": {
+                            "type": "string",
+                            "description": "Function address"
+                          },
+                          "old": {
+                            "type": "string",
+                            "description": "Current variable name"
+                          },
+                          "new": {
+                            "type": "string",
+                            "description": "New variable name"
+                          }
+                        },
+                        "required": [
+                          "func_addr",
+                          "old",
+                          "new"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ],
+                    "description": "Stack variable rename operations"
+                  },
+                  "stop_on_error": {
+                    "type": "boolean",
+                    "description": "Stop on first failure"
+                  },
+                  "dry_run": {
+                    "type": "boolean",
+                    "description": "Validate only, no changes"
+                  },
+                  "allow_overwrite": {
+                    "type": "boolean",
+                    "description": "Force overwrite existing names"
+                  }
+                },
+                "required": [],
+                "additionalProperties": false,
+                "description": "Rename batch with func/data/local/stack fields (at least one required)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "batch"
+            ]
+          }
+        },
+        {
+          "name": "define_func",
+          "description": "Define functions; IDA infers bounds unless end is provided.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "addr": {
+                          "type": "string",
+                          "description": "Address to define (hex or decimal). Use 'start:end' for explicit bounds."
+                        },
+                        "end": {
+                          "type": "string",
+                          "description": "Optional end address for explicit bounds"
+                        }
+                      },
+                      "required": [],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "addr": {
+                        "type": "string",
+                        "description": "Address to define (hex or decimal). Use 'start:end' for explicit bounds."
+                      },
+                      "end": {
+                        "type": "string",
+                        "description": "Optional end address for explicit bounds"
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "items"
+            ]
+          }
+        },
+        {
+          "name": "define_code",
+          "description": "Convert bytes to code instruction(s) at address(es).",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "addr": {
+                          "type": "string",
+                          "description": "Address to define (hex or decimal). Use 'start:end' for explicit bounds."
+                        },
+                        "end": {
+                          "type": "string",
+                          "description": "Optional end address for explicit bounds"
+                        }
+                      },
+                      "required": [],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "addr": {
+                        "type": "string",
+                        "description": "Address to define (hex or decimal). Use 'start:end' for explicit bounds."
+                      },
+                      "end": {
+                        "type": "string",
+                        "description": "Optional end address for explicit bounds"
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "items"
+            ]
+          }
+        },
+        {
+          "name": "undefine",
+          "description": "Undefine item(s) at address(es), converting back to raw bytes.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "addr": {
+                          "type": "string",
+                          "description": "Address to undefine (hex or decimal)"
+                        },
+                        "end": {
+                          "type": "string",
+                          "description": "Optional end address"
+                        },
+                        "size": {
+                          "type": "integer",
+                          "description": "Optional size in bytes"
+                        }
+                      },
+                      "required": [],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "addr": {
+                        "type": "string",
+                        "description": "Address to undefine (hex or decimal)"
+                      },
+                      "end": {
+                        "type": "string",
+                        "description": "Optional end address"
+                      },
+                      "size": {
+                        "type": "integer",
+                        "description": "Optional size in bytes"
+                      }
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "items"
+            ]
+          }
+        },
+        {
+          "name": "stack_frame",
+          "description": "Return stack variables for function address(es).",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "addrs": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "description": "Address(es)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "addrs"
+            ]
+          }
+        },
+        {
+          "name": "declare_stack",
+          "description": "Create stack variables from typed stack declarations.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "addr": {
+                          "type": "string",
+                          "description": "Function address"
+                        },
+                        "offset": {
+                          "type": "string",
+                          "description": "Stack offset"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Variable name"
+                        },
+                        "ty": {
+                          "type": "string",
+                          "description": "Type name"
+                        }
+                      },
+                      "required": [
+                        "addr",
+                        "offset",
+                        "name",
+                        "ty"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "addr": {
+                        "type": "string",
+                        "description": "Function address"
+                      },
+                      "offset": {
+                        "type": "string",
+                        "description": "Stack offset"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Variable name"
+                      },
+                      "ty": {
+                        "type": "string",
+                        "description": "Type name"
+                      }
+                    },
+                    "required": [
+                      "addr",
+                      "offset",
+                      "name",
+                      "ty"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "items"
+            ]
+          }
+        },
+        {
+          "name": "delete_stack",
+          "description": "Delete stack variables by name or offset.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "addr": {
+                          "type": "string",
+                          "description": "Function address"
+                        },
+                        "name": {
+                          "type": "string",
+                          "description": "Variable name"
+                        }
+                      },
+                      "required": [
+                        "addr",
+                        "name"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "addr": {
+                        "type": "string",
+                        "description": "Function address"
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "Variable name"
+                      }
+                    },
+                    "required": [
+                      "addr",
+                      "name"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "items"
+            ]
+          }
+        },
+        {
+          "name": "survey_binary",
+          "description": "Get a compact overview of the binary in one call. Returns file metadata,\nsegment layout, entry points, statistics, top 15 strings and functions ranked\nby xref count (functions include classification: thunk/wrapper/leaf/dispatcher/\ncomplex), imports by category, and call graph summary. Use this as your FIRST\ntool call when starting analysis. Do not call list_funcs, imports, or find_regex\nseparately for triage — this returns all of that. Use detail_level='minimal'\nfor binaries with >10k functions.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "detail_level": {
+                "type": "string",
+                "description": "Detail level: 'standard' or 'minimal'"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": []
+          }
+        },
+        {
+          "name": "analyze_function",
+          "description": "Compact single-function analysis: pseudocode, strings, constants, callers, callees, xrefs, blocks.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "addr": {
+                "type": "string",
+                "description": "Function address or name"
+              },
+              "include_asm": {
+                "type": "boolean",
+                "description": "Include full disassembly (default: false, saves tokens)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "addr"
+            ]
+          }
+        },
+        {
+          "name": "analyze_component",
+          "description": "Analyze related functions as a group: per-function summaries, internal call graph, shared data.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "addrs": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "description": "Function addresses (comma-separated or list)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "addrs"
+            ]
+          }
+        },
+        {
+          "name": "trace_data_flow",
+          "description": "Follow cross-references from or to an address, automatically traversing\nmultiple hops. Use 'forward' to see where data flows TO (xrefs-from), or\n'backward' to see where data flows FROM (xrefs-to). At each node in the\ntraversal, returns the function name, instruction, and whether it's code or\ndata. Use this when you find an interesting string, constant, or global and\nwant to understand every code path that touches it without manually chaining\nxrefs_to calls. Do not use for call graph traversal — use callgraph for that.\nmax_depth controls how many hops to follow (default 5, max 20).",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "addr": {
+                "type": "string",
+                "description": "Starting address"
+              },
+              "direction": {
+                "type": "string",
+                "description": "'forward' (xrefs from) or 'backward' (xrefs to)"
+              },
+              "max_depth": {
+                "type": "integer",
+                "description": "Maximum traversal depth"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "addr"
+            ]
+          }
+        },
+        {
+          "name": "make_signature",
+          "description": "Create unique byte signatures for addresses. Generates the shortest\nunique signature starting at each address by walking instructions and\nwildcarding operands. Useful for finding stable patterns that survive\nrecompilation.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "addrs": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "description": "Address(es) or name(s) to create unique signatures for (e.g. '0x401000', 'main', or ['0x401000', 'sub_402000'])"
+              },
+              "format": {
+                "type": "string",
+                "description": "Output format: 'ida' (default), 'x64dbg', 'mask', or 'bitmask'"
+              },
+              "wildcard_operands": {
+                "type": "boolean",
+                "description": "Wildcard instruction operands for relocatable signatures (default: true)"
+              },
+              "max_length": {
+                "type": "integer",
+                "description": "Maximum signature length in bytes before giving up (default: 1000)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "addrs"
+            ]
+          }
+        },
+        {
+          "name": "make_signature_for_function",
+          "description": "Create unique byte signatures for function entry points. Resolves each\nname/address to a function, then generates the shortest unique signature\nstarting at the function start.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "addrs": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "description": "Function address(es) or name(s) to create signatures for (e.g. 'main', '0x401000', or ['main', 'sub_402000'])"
+              },
+              "format": {
+                "type": "string",
+                "description": "Output format: 'ida' (default), 'x64dbg', 'mask', or 'bitmask'"
+              },
+              "wildcard_operands": {
+                "type": "boolean",
+                "description": "Wildcard instruction operands for relocatable signatures (default: true)"
+              },
+              "max_length": {
+                "type": "integer",
+                "description": "Maximum signature length in bytes before giving up (default: 1000)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "addrs"
+            ]
+          }
+        },
+        {
+          "name": "make_signature_for_range",
+          "description": "Create a byte signature for a specific address range (e.g. a selected\nregion). Unlike make_signature, this does NOT guarantee uniqueness — it\nsimply encodes the bytes in the range with optional operand wildcarding.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "start": {
+                "type": "string",
+                "description": "Start address or name (e.g. '0x401000')"
+              },
+              "end": {
+                "type": "string",
+                "description": "End address or name (exclusive, e.g. '0x401020')"
+              },
+              "format": {
+                "type": "string",
+                "description": "Output format: 'ida' (default), 'x64dbg', 'mask', or 'bitmask'"
+              },
+              "wildcard_operands": {
+                "type": "boolean",
+                "description": "Wildcard instruction operands for relocatable signatures (default: true)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "start",
+              "end"
+            ]
+          }
+        },
+        {
+          "name": "find_xref_signatures",
+          "description": "Find signatures for code locations that reference an address. For each\ninput address, finds all code cross-references TO it, generates a unique\nsignature at each xref site, and returns the shortest ones. Ideal for\ncreating signatures for data addresses, vtable entries, or string\nreferences that can't be signatured directly.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "addrs": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "description": "Address(es) or name(s) to find XREF signatures for (e.g. a data address referenced by code)"
+              },
+              "format": {
+                "type": "string",
+                "description": "Output format: 'ida' (default), 'x64dbg', 'mask', or 'bitmask'"
+              },
+              "top": {
+                "type": "integer",
+                "description": "Number of shortest signatures to return per address (default: 5)"
+              },
+              "max_length": {
+                "type": "integer",
+                "description": "Maximum signature length in bytes (default: 250)"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database/session to route this call to. Accepts a session_id, filename, or input path. If omitted, uses the database bound to the current MCP context."
+              }
+            },
+            "required": [
+              "addrs"
+            ]
+          }
+        },
+        {
+          "name": "idalib_open",
+          "description": "Open a binary in its own idalib worker process and bind it to this context.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "input_path": {
+                "type": "string",
+                "description": "Path to the binary file to analyze"
+              },
+              "run_auto_analysis": {
+                "type": "boolean",
+                "description": "Run automatic analysis on the binary"
+              },
+              "session_id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Custom session ID (auto-generated if not provided)"
+              }
+            },
+            "required": [
+              "input_path"
+            ]
+          }
+        },
+        {
+          "name": "idalib_close",
+          "description": "Close a database worker and remove all context bindings targeting it.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "session_id": {
+                "type": "string",
+                "description": "Session ID to close"
+              }
+            },
+            "required": [
+              "session_id"
+            ]
+          }
+        },
+        {
+          "name": "idalib_switch",
+          "description": "Bind the active idalib context to an existing database worker.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "session_id": {
+                "type": "string",
+                "description": "Session ID to bind to active context"
+              }
+            },
+            "required": [
+              "session_id"
+            ]
+          }
+        },
+        {
+          "name": "idalib_unbind",
+          "description": "Unbind the active idalib context from any database.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+          }
+        },
+        {
+          "name": "idalib_list",
+          "description": "List database workers with context-binding metadata.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+          }
+        },
+        {
+          "name": "idalib_current",
+          "description": "Return the database bound to the active idalib context.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {},
+            "required": []
+          }
+        },
+        {
+          "name": "idalib_save",
+          "description": "Save the selected database worker's IDB.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "description": "Optional destination path (default: current IDB path)"
+              },
+              "session_id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Optional session to save"
+              }
+            },
+            "required": []
+          }
+        },
+        {
+          "name": "idalib_health",
+          "description": "Health/ready probe for a database worker.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "session_id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Optional session to probe"
+              }
+            },
+            "required": []
+          }
+        },
+        {
+          "name": "idalib_warmup",
+          "description": "Warm up selected database worker and core subsystems.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "session_id": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Optional session to warm up"
+              },
+              "wait_auto_analysis": {
+                "type": "boolean",
+                "description": "Wait for auto analysis queue"
+              },
+              "build_caches": {
+                "type": "boolean",
+                "description": "Build core caches"
+              },
+              "init_hexrays": {
+                "type": "boolean",
+                "description": "Initialize Hex-Rays plugin"
+              }
+            },
+            "required": []
+          }
+        }
+      ],
+      "resources": [
+        {
+          "uri": "ida://databases",
+          "name": "databases_resource",
+          "description": "List open idalib worker databases."
+        },
+        {
+          "uri": "ida://idb/metadata",
+          "name": "idb_metadata_resource",
+          "description": "Get IDB file metadata (path, arch, base address, size, hashes)"
+        },
+        {
+          "uri": "ida://idb/segments",
+          "name": "idb_segments_resource",
+          "description": "Get all memory segments with permissions"
+        },
+        {
+          "uri": "ida://idb/entrypoints",
+          "name": "idb_entrypoints_resource",
+          "description": "Get entry points (main, TLS callbacks, etc.)"
+        },
+        {
+          "uri": "ida://cursor",
+          "name": "cursor_resource",
+          "description": "Get current cursor position and function"
+        },
+        {
+          "uri": "ida://selection",
+          "name": "selection_resource",
+          "description": "Get current selection range (if any)"
+        },
+        {
+          "uri": "ida://types",
+          "name": "types_resource",
+          "description": "Get all local types"
+        },
+        {
+          "uri": "ida://structs",
+          "name": "structs_resource",
+          "description": "Get all structures/unions"
+        }
+      ],
+      "cachedAt": 1781451045032
+    },
+    "jadx-mcp-server": {
+      "configHash": "06a4960a5636f021047ee390b05e5a2bbd68d2710cd922997eb7a6009d760e33",
+      "tools": [
+        {
+          "name": "fetch_current_class",
+          "description": "Fetch the currently selected class and its code from the JADX-GUI plugin.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "get_selected_text",
+          "description": "Returns the currently selected text in the decompiled code view.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "get_method_by_name",
+          "description": "Fetch the source code of a method from a specific class.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "class_name": {
+                "type": "string"
+              },
+              "method_name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "class_name",
+              "method_name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "get_all_classes",
+          "description": "Returns a list of all classes in the project with pagination support.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "offset": {
+                "default": 0,
+                "type": "integer"
+              },
+              "count": {
+                "default": 0,
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "get_class_source",
+          "description": "Fetch the Java source of a specific class.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "class_name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "class_name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "search_method_by_name",
+          "description": "Search for a method name across all classes.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "method_name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "method_name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "get_methods_of_class",
+          "description": "List all method names in a class.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "class_name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "class_name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "search_classes_by_keyword",
+          "description": "Search for classes containing a specific keyword with flexible filtering options.\n\nThis tool performs a comprehensive search across decompiled Android code, allowing you to:\n1. Search within specific packages by providing a package name\n2. Target specific search scopes (class names, method names, fields, code content, comments)\n3. Combine multiple search scopes for precise results",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "search_term": {
+                "type": "string",
+                "description": "The keyword or string to search for. This is the main search query."
+              },
+              "package": {
+                "default": "",
+                "type": "string",
+                "description": "Package name to limit the search scope.\n- If empty string (default), searches across all packages in the APK\n- If provided, only searches within classes belonging to the specified package\n- Example: \"com.example.app\" to search only in that package"
+              },
+              "search_in": {
+                "default": "code",
+                "type": "string",
+                "description": "Comma-separated list of search scopes to target.\nValid values:\n- \"class\": Search in class names only\n- \"method\": Search in method names only\n- \"field\": Search in field names only\n- \"code\": Search in code content (method bodies, statements, etc.)\n- \"comment\": Search in comments\n\nYou can specify one or multiple scopes:\n- Single scope: \"class\" (only class names)\n- Multiple scopes: \"class,method\" (class names OR method names)\n- Combined: \"class,method,code\" (searches in all three scopes)\n\nDefault: \"code\" (searches in code content)"
+              },
+              "offset": {
+                "default": 0,
+                "type": "integer",
+                "description": "Starting index for pagination. Default: 0"
+              },
+              "count": {
+                "default": 20,
+                "type": "integer",
+                "description": "Maximum number of results to return. Default: 20"
+              }
+            },
+            "required": [
+              "search_term"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "get_fields_of_class",
+          "description": "List all field names in a class.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "class_name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "class_name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "get_smali_of_class",
+          "description": "Fetch the smali representation of a class.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "class_name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "class_name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "get_manifest_component",
+          "description": "Retrieve specified component data from AndroidManifest.xml, support filter exported components.\nSupport standard Android components: activity, provider, service, receiver.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "component_type": {
+                "type": "string"
+              },
+              "only_exported": {
+                "default": false,
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "component_type"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "get_android_manifest",
+          "description": "Retrieve and return the AndroidManifest.xml content.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "get_strings",
+          "description": "Retrieve contents of strings.xml files.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "offset": {
+                "default": 0,
+                "type": "integer"
+              },
+              "count": {
+                "default": 0,
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "get_all_resource_file_names",
+          "description": "Retrieve all resource files names.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "offset": {
+                "default": 0,
+                "type": "integer"
+              },
+              "count": {
+                "default": 0,
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "get_resource_file",
+          "description": "Retrieve resource file content.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "resource_name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "resource_name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "get_main_application_classes_names",
+          "description": "Fetch main application classes' names from Manifest package.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "get_main_application_classes_code",
+          "description": "Fetch main application classes' code with pagination.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "offset": {
+                "default": 0,
+                "type": "integer"
+              },
+              "count": {
+                "default": 0,
+                "type": "integer"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "get_main_activity_class",
+          "description": "Fetch the main activity class from AndroidManifest.xml.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "rename_class",
+          "description": "Renames a specific class.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "class_name": {
+                "type": "string"
+              },
+              "new_name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "class_name",
+              "new_name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "rename_method",
+          "description": "Renames a specific method.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "method_name": {
+                "type": "string"
+              },
+              "new_name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "method_name",
+              "new_name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "rename_field",
+          "description": "Renames a specific field.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "class_name": {
+                "type": "string"
+              },
+              "field_name": {
+                "type": "string"
+              },
+              "new_name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "class_name",
+              "field_name",
+              "new_name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "rename_package",
+          "description": "Renames a package and all its classes.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "old_package_name": {
+                "type": "string"
+              },
+              "new_package_name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "old_package_name",
+              "new_package_name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "rename_variable",
+          "description": "Renames a specific variable in a method.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "class_name": {
+                "type": "string"
+              },
+              "method_name": {
+                "type": "string"
+              },
+              "variable_name": {
+                "type": "string"
+              },
+              "new_name": {
+                "type": "string"
+              },
+              "reg": {
+                "default": null,
+                "type": "string"
+              },
+              "ssa": {
+                "default": null,
+                "type": "string"
+              }
+            },
+            "required": [
+              "class_name",
+              "method_name",
+              "variable_name",
+              "new_name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "debug_get_stack_frames",
+          "description": "Get current stack frames (call stack).",
+          "inputSchema": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "debug_get_threads",
+          "description": "Get all threads in the debugged process.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "debug_get_variables",
+          "description": "Get current variables when process is suspended.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {},
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "get_xrefs_to_class",
+          "description": "Find all references to a class.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "class_name": {
+                "type": "string"
+              },
+              "offset": {
+                "default": 0,
+                "type": "integer"
+              },
+              "count": {
+                "default": 20,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "class_name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "get_xrefs_to_method",
+          "description": "Find all references to a method.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "class_name": {
+                "type": "string"
+              },
+              "method_name": {
+                "type": "string"
+              },
+              "offset": {
+                "default": 0,
+                "type": "integer"
+              },
+              "count": {
+                "default": 20,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "class_name",
+              "method_name"
+            ],
+            "additionalProperties": false
+          }
+        },
+        {
+          "name": "get_xrefs_to_field",
+          "description": "Find all references to a field.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "class_name": {
+                "type": "string"
+              },
+              "field_name": {
+                "type": "string"
+              },
+              "offset": {
+                "default": 0,
+                "type": "integer"
+              },
+              "count": {
+                "default": 20,
+                "type": "integer"
+              }
+            },
+            "required": [
+              "class_name",
+              "field_name"
+            ],
+            "additionalProperties": false
+          }
+        }
+      ],
+      "resources": [],
+      "cachedAt": 1781451045026
+    }
+  }
+}

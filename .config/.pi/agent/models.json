@@ -1,0 +1,220 @@
+{
+	"providers": {
+		"cui-AI": {
+			"baseUrl": "https://cdn.jucode.top/v1",
+			"api": "openai-responses",
+			"apiKey": "",
+			"compat": {
+				"sendSessionAffinityHeaders": true
+			},
+			"models": [
+				{
+					"id": "gpt-5.5",
+					"name": "GPT-5.5",
+					"reasoning": true,
+					"input": [
+						"text",
+						"image"
+					],
+					"contextWindow": 10000000,
+					"maxTokens": 128000000,
+					"cost": {
+						"input": 0,
+						"output": 0,
+						"cacheRead": 0,
+						"cacheWrite": 0
+					}
+				},
+				{
+					"id": "gpt-5.4",
+					"name": "GPT-5.4",
+					"reasoning": true,
+					"input": [
+						"text",
+						"image"
+					],
+					"contextWindow": 10000000,
+					"maxTokens": 128000000,
+					"cost": {
+						"input": 0,
+						"output": 0,
+						"cacheRead": 0,
+						"cacheWrite": 0
+					}
+				}
+			]
+		},
+		"chamd5-AI": {
+			"baseUrl": "https://ai.chamd5.org/v1",
+			"api": "openai-responses",
+			"apiKey": "",
+			"compat": {
+				"sendSessionAffinityHeaders": true
+			},
+			"models": [
+				{
+					"id": "gpt-5.5",
+					"name": "GPT-5.5",
+					"reasoning": true,
+					"input": [
+						"text",
+						"image"
+					],
+					"contextWindow": 10000000,
+					"maxTokens": 128000000,
+					"cost": {
+						"input": 0,
+						"output": 0,
+						"cacheRead": 0,
+						"cacheWrite": 0
+					}
+				},
+				{
+					"id": "gpt-5.4",
+					"name": "GPT-5.4",
+					"reasoning": true,
+					"input": [
+						"text",
+						"image"
+					],
+					"contextWindow": 10000000,
+					"maxTokens": 128000000,
+					"cost": {
+						"input": 0,
+						"output": 0,
+						"cacheRead": 0,
+						"cacheWrite": 0
+					}
+				}
+			]
+		},
+		"fox-codex": {
+			"baseUrl": "https://code.newcli.com/codex/v1",
+			"api": "openai-responses",
+			"apiKey": "",
+			"compat": {
+				"sendSessionAffinityHeaders": true
+			},
+			"models": [
+				{
+					"id": "gpt-5.5",
+					"name": "GPT-5.5",
+					"reasoning": true,
+					"input": [
+						"text",
+						"image"
+					],
+					"contextWindow": 10000000,
+					"maxTokens": 128000000,
+					"cost": {
+						"input": 0,
+						"output": 0,
+						"cacheRead": 0,
+						"cacheWrite": 0
+					}
+				},
+				{
+					"id": "gpt-5.4",
+					"name": "GPT-5.4",
+					"reasoning": true,
+					"input": [
+						"text",
+						"image"
+					],
+					"contextWindow": 10000000,
+					"maxTokens": 128000000,
+					"cost": {
+						"input": 0,
+						"output": 0,
+						"cacheRead": 0,
+						"cacheWrite": 0
+					}
+				}
+			]
+		},
+		"yl": {
+			"baseUrl": "https://api.zyuo.cn/",
+			"api": "anthropic-messages",
+			"apiKey": "",
+			"compat": {
+				"supportsEagerToolInputStreaming": false,
+				"supportsLongCacheRetention": true,
+				"forceAdaptiveThinking": true,
+				"allowEmptySignature": true
+			},
+			"models": [
+				{
+					"id": "claude-opus-4-8",
+					"reasoning": true,
+					"input": [
+						"text",
+						"image"
+					]
+				}
+			]
+		},
+		"fox-aws": {
+			"baseUrl": "https://code.newcli.com/claude/aws/",
+			"api": "anthropic-messages",
+			"apiKey": "",
+			"compat": {
+				"supportsEagerToolInputStreaming": false,
+				"supportsLongCacheRetention": true,
+				"forceAdaptiveThinking": true,
+				"allowEmptySignature": true
+			},
+			"models": [
+				{
+					"id": "claude-opus-4-5",
+					"reasoning": true,
+					"input": [
+						"text",
+						"image"
+					]
+				}
+			]
+		},
+		"fox-Ultra": {
+			"baseUrl": "https://code.newcli.com/claude/ultra",
+			"api": "anthropic-messages",
+			"apiKey": "",
+			"compat": {
+				"supportsEagerToolInputStreaming": false,
+				"supportsLongCacheRetention": true,
+				"forceAdaptiveThinking": true,
+				"allowEmptySignature": true
+			},
+			"models": [
+				{
+					"id": "claude-opus-4-8",
+					"reasoning": true,
+					"input": [
+						"text",
+						"image"
+					]
+				}
+			]
+		},
+		"anyrouter": {
+			"baseUrl": "https://anyrouter.top",
+			"api": "anthropic-messages",
+			"apiKey": "",
+			"compat": {
+				"supportsEagerToolInputStreaming": false,
+				"supportsLongCacheRetention": true,
+				"forceAdaptiveThinking": true,
+				"allowEmptySignature": true
+			},
+			"models": [
+				{
+					"id": "claude-opus-4-8",
+					"reasoning": true,
+					"input": [
+						"text",
+						"image"
+					]
+				}
+			]
+		}
+	}
+}

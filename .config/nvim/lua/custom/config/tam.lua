@@ -3,7 +3,7 @@ require('tmux-awesome-manager').setup {
   per_project_commands = { -- Configure your per project servers with
     -- project name = { { cmd, name } }
     ['stack-ut-shifter'] = { { cmd = 'ls', name = 'ls' }, { cmd = 'lh', name = 'lh' } },
-    front = { { cmd = 'yarn dev', name = 'react server' } },
+    front = { { cmd = 'pnpm dev', name = 'react server' } },
   },
   session_name = 'Neovim Terminals',
   use_icon = false, -- use prefix icon
@@ -67,7 +67,7 @@ vim.keymap.set(
 
 -- run scripts
 tmux.run {
-  cmd = 'python3 ' .. vim.fn.expand '%',
+  cmd = 'uv run python ' .. vim.fn.expand '%',
   name = 'Run Python Script',
   pane_id = 'PythonScript',
   orientation = 'horizontal',

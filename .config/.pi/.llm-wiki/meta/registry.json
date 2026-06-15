@@ -1,0 +1,87 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-06-13T09:54:43.806Z",
+  "pages": {
+    "sources/obs-2026-06-12-patched-usage-with-cache-hit-percentage": {
+      "type": "source",
+      "title": "\"Observation: Patched /usage with cache hit percentage\"",
+      "created": "2026-06-12",
+      "updated": "2026-06-12",
+      "slug": "obs-2026-06-12-patched-usage-with-cache-hit-percentage",
+      "status": "observation",
+      "relevance": "high",
+      "observed_at": "2026-06-12T08:53:00.478Z",
+      "tags": [
+        "pi",
+        "extension",
+        "usage",
+        "cache",
+        "hit",
+        "patch",
+        "settings"
+      ],
+      "source_context": "\"Adding cache-hit percentage to Pi /usage command\""
+    },
+    "sources/obs-2026-06-12-pi-footer-shows-cache-hit-rate-but-wiki-empty": {
+      "type": "source",
+      "title": "\"Observation: Pi footer shows cache hit rate but wiki empty\"",
+      "created": "2026-06-12",
+      "updated": "2026-06-12",
+      "slug": "obs-2026-06-12-pi-footer-shows-cache-hit-rate-but-wiki-empty",
+      "status": "observation",
+      "relevance": "medium",
+      "observed_at": "2026-06-12T08:40:05.326Z",
+      "tags": [
+        "pi",
+        "llm-wiki",
+        "usage",
+        "cache",
+        "footer",
+        "rpc"
+      ],
+      "source_context": "\"Explaining Pi usage metrics vs cache hit visibility\""
+    },
+    "sources/obs-2026-06-12-python-ctf-venv": {
+      "type": "source",
+      "title": "\"Observation: Python 运行前先激活 CTF venv\"",
+      "created": "2026-06-12",
+      "updated": "2026-06-12",
+      "slug": "obs-2026-06-12-python-ctf-venv",
+      "status": "observation",
+      "relevance": "critical",
+      "observed_at": "2026-06-12T09:02:35.403Z",
+      "tags": [
+        "python",
+        "uv",
+        "venv",
+        "preference",
+        "ctf"
+      ],
+      "source_context": "\"记录用户的持久化 Python 运行习惯\""
+    },
+    "sources/obs-2026-06-13-web": {
+      "type": "source",
+      "title": "\"Observation: Web 访问工具选择策略已建立\"",
+      "created": "2026-06-13",
+      "updated": "2026-06-13",
+      "slug": "obs-2026-06-13-web",
+      "status": "observation",
+      "relevance": "high",
+      "observed_at": "2026-06-13T09:54:43.798Z",
+      "tags": [
+        "tools",
+        "web",
+        "decision-matrix"
+      ]
+    },
+    "sources/pi-usage-cache-hit-column": {
+      "type": "source",
+      "title": "\"Pi usage cache hit column\"",
+      "created": "2026-06-12",
+      "updated": "2026-06-12",
+      "slug": "pi-usage-cache-hit-column",
+      "status": "insight",
+      "category": "architecture"
+    }
+  }
+}

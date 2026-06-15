@@ -59,19 +59,19 @@ return {
     },
     -- 如果您不想使用这些列，可以将`enabled`设置为false
     file_size = {
-      enabled = true,
+      enabled = false,
       required_width = 64, -- 最小窗口宽度以显示此列
     },
     type = {
-      enabled = true,
+      enabled = false,
       required_width = 122, -- 最小窗口宽度以显示此列
     },
     last_modified = {
-      enabled = true,
+      enabled = false,
       required_width = 88, -- 最小窗口宽度以显示此列
     },
     created = {
-      enabled = true,
+      enabled = false,
       required_width = 110, -- 最小窗口宽度以显示此列
     },
     symlink_target = {
@@ -82,7 +82,7 @@ return {
   commands = {},
   window = {
     position = "left",
-    width = 40,
+    width = 32,
     mapping_options = {
       noremap = true,
       nowait = true,
@@ -204,7 +204,7 @@ return {
 
     commands = {} -- 添加自定义命令表，将在文件系统源中可用
   },
-  -- 禁用 buffers 源，因为使用 bento.nvim 进行管理
+  -- 只保留 filesystem 和 git_status 两个 source
   source_selector = {
     winbar = false,
     statusline = false,

@@ -45,15 +45,6 @@ function M.setup()
             -- 代码操作
             map('<leader>la', vim.lsp.buf.code_action, 'Code Action')
 
-            -- 重命名
-            vim.keymap.set('n', '<leader>rn', function()
-                return ':IncRename ' .. vim.fn.expand('<cword>')
-            end, {
-                buffer = event.buf,
-                expr = true,
-                desc = 'LSP: Rename'
-            })
-
             -- 显示诊断
             map('<leader>ld', function()
                 vim.diagnostic.open_float {
@@ -88,14 +79,46 @@ function M.setup()
             -- 客户端对象
             local client = vim.lsp.get_client_by_id(event.data.client_id)
 
+            if client and client.name == 'minuet' then
+                return
+            end
+
+            -- 重命名
+            vim.keymap.set('n', '<leader>rn', function()
+                local rename_clients = vim.tbl_filter(function(lsp_client)
+                    return lsp_client:supports_method(vim.lsp.protocol.Methods.textDocument_rename)
+                end, vim.lsp.get_clients { bufnr = event.buf })
+
+                if #rename_clients == 0 then
+                    vim.notify('No attached LSP server supports rename', vim.log.levels.WARN)
+                    return ''
+                end
+
+                local ok_pack, pack = pcall(require, 'custom.pack')
+                if ok_pack then
+                    pack.load('inc-rename.nvim')
+                end
+
+                if vim.fn.exists(':IncRename') == 2 then
+                    return ':IncRename ' .. vim.fn.expand('<cword>')
+                end
+
+                vim.schedule(vim.lsp.buf.rename)
+                return ''
+            end, {
+                buffer = event.buf,
+                expr = true,
+                desc = 'LSP: Rename'
+            })
+
             -- 折叠支持
-            if client and client.supports_method 'textDocument/foldingRange' then
+            if client and client:supports_method 'textDocument/foldingRange' then
                 local win = vim.api.nvim_get_current_win()
                 vim.wo[win][0].foldexpr = 'v:lua.vim.lsp.foldexpr()'
             end
 
             -- 内嵌提示 (Inlay Hints)
-            if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+            if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
                 map('<leader>th', function()
                     vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {
                         bufnr = event.buf
@@ -104,11 +127,24 @@ function M.setup()
             end
 
             -- 光标下单词高亮
-            if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) and
+            if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) and
                 vim.bo.filetype ~= 'bigfile' then
                 local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', {
                     clear = false
                 })
+                local detach_augroup = vim.api.nvim_create_augroup('kickstart-lsp-detach', {
+                    clear = false
+                })
+
+                vim.api.nvim_clear_autocmds {
+                    group = highlight_augroup,
+                    buffer = event.buf
+                }
+                vim.api.nvim_clear_autocmds {
+                    group = detach_augroup,
+                    buffer = event.buf
+                }
+
                 vim.api.nvim_create_autocmd({'CursorHold', 'CursorHoldI'}, {
                     buffer = event.buf,
                     group = highlight_augroup,
@@ -122,9 +158,8 @@ function M.setup()
                 })
 
                 vim.api.nvim_create_autocmd('LspDetach', {
-                    group = vim.api.nvim_create_augroup('kickstart-lsp-detach', {
-                        clear = true
-                    }),
+                    group = detach_augroup,
+                    buffer = event.buf,
                     callback = function(event2)
                         vim.lsp.buf.clear_references()
                         vim.api.nvim_clear_autocmds {

@@ -1,0 +1,29 @@
+{
+  "name": "@tmustier/pi-raw-paste",
+  "version": "0.1.3",
+  "description": "One-shot raw paste support for Pi (/paste).",
+  "license": "MIT",
+  "author": "Thomas Mustier",
+  "keywords": [
+    "pi-package"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tmustier/pi-extensions.git",
+    "directory": "raw-paste"
+  },
+  "bugs": "https://github.com/tmustier/pi-extensions/issues",
+  "homepage": "https://github.com/tmustier/pi-extensions/tree/main/raw-paste",
+  "pi": {
+    "extensions": [
+      "index.ts"
+    ],
+    "image": "https://github.com/user-attachments/assets/292c059a-8b06-40c2-abdd-795c0699336a"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  },
+  "devDependencies": {
+    "@earendil-works/pi-coding-agent": "^0.74.0"
+  }
+}

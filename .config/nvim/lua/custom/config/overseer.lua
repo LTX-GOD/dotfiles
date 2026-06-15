@@ -7,8 +7,8 @@ vim.api.nvim_create_autocmd('FileType', {
     end
 })
 local workdir = os.getenv 'WORKDIR' or ''
--- 仅保留 rr/rs/rt、最小化 setup 与退出保护
--- rr: 使用 python3 运行当前 Python 文件
+-- rr: Overseer 任务模板
+-- rp: 使用 uv run python 运行当前 Python 文件
 -- rs: 使用 sage -python 运行当前 Python 文件
 -- rt: 切换 Overseer 任务面板
 
@@ -41,7 +41,7 @@ local function run_python_file(use_sage, use_uv)
         end
         cmd, args, title = 'uv', {'run', 'python', file}, ('UV Python: %s'):format(name)
     else
-        cmd, args, title = 'python3', {file}, ('Python: %s'):format(name)
+        cmd, args, title = 'uv', {'run', 'python', file}, ('UV Python: %s'):format(name)
     end
 
     local task = overseer.new_task({
@@ -78,17 +78,6 @@ vim.keymap.set('n', '<leader>rs', function()
     run_python_file(true, false)  -- use_sage=true, use_uv=false
 end, {
     desc = 'Run current Python (sage -python)'
-})
-
--- 任务面板切换
-vim.keymap.set('n', '<leader>rt', '<cmd>OverseerToggle<cr>', {
-    desc = 'Overseer toggle task list'
-})
-
--- Overseer 最小化配置：不加载任何模板，避免出现“模板选择”列表
-overseer.setup({
-    strategy = 'terminal',
-    templates = {} -- 清空模板
 })
 
 -- 退出保护：有运行中的任务且仅剩一个窗口时阻止退出

@@ -1,6 +1,6 @@
 return {
   'catppuccin/nvim',
-  priority = 1000, -- Make sure to load this before all the other start plugins.
+  priority = 1000,
   config = function()
     require('catppuccin').setup {
       transparent_background = true,
@@ -25,7 +25,7 @@ return {
             CursorLineNr = { fg = mocha.yellow },
             FlashCurrent = { bg = mocha.peach, fg = mocha.base },
             FlashMatch = { bg = mocha.red, fg = mocha.base },
-            FlashLabel = { bg = mocha.teal, fg = mocha.base }
+            FlashLabel = { bg = mocha.teal, fg = mocha.base },
           }
         end,
       },
