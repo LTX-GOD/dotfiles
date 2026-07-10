@@ -80,6 +80,8 @@ return {
       end
     end, 'Find todo')
 
+    map('<leader>t1', function() Snacks.terminal.toggle() end, 'Toggle terminal')
+
     map('<leader>bc', Snacks.bufdelete.delete, 'Delete buffers')
     map('<leader>bC', Snacks.bufdelete.other, 'Delete other buffers')
     map('<leader>gg', function()

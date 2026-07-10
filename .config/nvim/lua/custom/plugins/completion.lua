@@ -129,16 +129,7 @@ return {
       ['<Down>'] = { 'select_next', 'fallback' },
       ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
       ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
-      ['<Tab>'] = {
-        'snippet_forward',
-        function()
-          if vim.lsp.inline_completion then
-            return vim.lsp.inline_completion.get()
-          end
-        end,
-        'select_next',
-        'fallback',
-      },
+      ['<Tab>'] = { 'snippet_forward', 'select_next', 'fallback' },
       ['<S-Tab>'] = { 'snippet_backward', 'select_prev', 'fallback' },
       ['<CR>'] = { 'accept', 'fallback' },
     },

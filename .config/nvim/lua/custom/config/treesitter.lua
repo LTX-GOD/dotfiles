@@ -1,6 +1,7 @@
 require('custom.compat.treesitter_0_12').setup()
 
 local languages = {
+  'java',
   'bash',
   'python',
   'cpp',
@@ -22,6 +23,7 @@ local languages = {
 }
 
 local filetypes = {
+  'java',
   'bash',
   'cpp',
   'diff',

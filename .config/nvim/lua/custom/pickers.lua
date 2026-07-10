@@ -20,14 +20,14 @@ M.pick_repositories = function(opts)
     for part in line:gmatch '[^:]+' do
       table.insert(parts, part)
     end
-    local snack_item = {
-      text = parts[1] .. '\t' .. parts[2] .. '\t' .. parts[3],
-    }
-    table.insert(items, snack_item)
+    -- detached HEAD 等情况下字段可能缺失，按实际字段数拼接
+    if #parts > 0 then
+      table.insert(items, { text = table.concat(parts, '\t') })
+    end
   end
 
   return Snacks.picker(vim.tbl_extend('keep', opts or {}, {
-    title = 'Git Respositories',
+    title = 'Git Repositories',
     items = items,
     sort = {
       fields = { 'idx' },

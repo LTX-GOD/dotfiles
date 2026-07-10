@@ -2,7 +2,7 @@
 --  See `:help lua-guide-autocommands`
 
 local function augroup(name)
-	return vim.api.nvim_create_augroup('lazyvim_' .. name, { clear = true })
+	return vim.api.nvim_create_augroup('custom-' .. name, { clear = true })
 end
 
 -- Highlight when yanking (copying) text
@@ -10,7 +10,7 @@ end
 --  See `:help vim.highlight.on_yank()`
 vim.api.nvim_create_autocmd('TextYankPost', {
 	desc = 'Highlight when yanking (copying) text',
-	group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+	group = augroup 'highlight-yank',
 	callback = function()
 		vim.highlight.on_yank()
 	end,
@@ -56,24 +56,24 @@ vim.api.nvim_create_autocmd({ 'FileType' }, {
 
 vim.api.nvim_create_autocmd('TermOpen', {
 	pattern = '*',
-	callback = function()
+	callback = function(ev)
 		vim.opt_local.number = false
 		vim.opt_local.relativenumber = false
+		local opts = { buffer = true, silent = true, noremap = true }
+		-- lazygit / claude / pi 等全屏 TUI 自己要用 Esc，不劫持
+		local cmd = vim.api.nvim_buf_get_name(ev.buf):match 'term://.-//%d+:(.*)' or ''
+		local is_tui = cmd:find('lazygit', 1, true) or cmd:find('claude', 1, true) or cmd:match '%f[%w]pi%f[%W]'
+		if not is_tui then
+			vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], vim.tbl_extend('force', opts, { desc = '终端 -> Normal' }))
+		end
+		vim.keymap.set('t', '<C-q>', [[<C-\><C-n><cmd>close<cr>]], vim.tbl_extend('force', opts, { desc = '关闭终端窗口' }))
+		vim.keymap.set('t', '<C-h>', [[<C-\><C-n><C-w>h]], opts)
+		vim.keymap.set('t', '<C-j>', [[<C-\><C-n><C-w>j]], opts)
+		vim.keymap.set('t', '<C-k>', [[<C-\><C-n><C-w>k]], opts)
+		vim.keymap.set('t', '<C-l>', [[<C-\><C-n><C-w>l]], opts)
 	end,
 })
 
-vim.api.nvim_create_augroup('IrreplaceableWindows', { clear = true })
-vim.api.nvim_create_autocmd('BufWinEnter', {
-	group = 'IrreplaceableWindows',
-	pattern = '*',
-	callback = function()
-		local filetypes = { 'neo-tree' }
-		local buftypes = { 'nofile', 'terminal' }
-		if vim.tbl_contains(buftypes, vim.bo.buftype) and vim.tbl_contains(filetypes, vim.bo.filetype) then
-			vim.cmd 'set winfixbuf'
-		end
-	end,
-})
 
 vim.api.nvim_create_autocmd('VimResized', {
 	pattern = '*',
@@ -81,11 +81,10 @@ vim.api.nvim_create_autocmd('VimResized', {
 		vim.cmd 'wincmd ='
 	end,
 })
--- Override mapping in quickfix window
+-- Override <CR> in quickfix: prevent global fold-toggle from intercepting it
 vim.api.nvim_create_autocmd('FileType', {
 	pattern = 'qf',
 	callback = function()
-		-- Unmap <CR> in quickfix window (if needed)
-		vim.keymap.set('n', '<CR>', '<CR>', { buffer = true, desc = 'Default Enter in quickfix' })
+		vim.keymap.set('n', '<CR>', '<CR>', { buffer = true, noremap = true, desc = 'Jump to quickfix entry' })
 	end,
 })

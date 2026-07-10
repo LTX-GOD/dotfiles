@@ -3,79 +3,76 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
 vim.g.markdown_folding = 1
-vim.opt.linebreak = true
 vim.g.simple_indicator_on = false
 vim.o.winborder = 'single'
 
 -- [[ Setting options ]]
--- See `:help vim.opt`
+-- See `:help vim.o`
 --  For more options, you can see `:help option-list`
-vim.opt.termguicolors = true
+vim.o.termguicolors = true
 
 -- Make line numbers default
-vim.opt.relativenumber = true
-vim.opt.number = true
-vim.opt.signcolumn = 'yes'
-vim.opt.numberwidth = 4
+vim.o.relativenumber = true
+vim.o.number = true
+vim.o.signcolumn = 'yes'
+vim.o.numberwidth = 4
 
 -- enable soft line wrap
-vim.opt.wrap = true
+vim.o.wrap = true
+vim.o.linebreak = true
 
 -- only one statusline
-vim.opt.laststatus = 3
+vim.o.laststatus = 3
 
 -- Enable mouse mode, can be useful for resizing splits for example!
-vim.opt.mouse = 'a'
+vim.o.mouse = 'a'
 
 -- Don't show the mode, since it's already in the status line
-vim.opt.showmode = false
+vim.o.showmode = false
 
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
 vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
+  vim.o.clipboard = 'unnamedplus'
 end)
 
 -- Enable break indent
-vim.opt.breakindent = true
+vim.o.breakindent = true
 
 -- Save undo history
-vim.opt.undofile = true
+vim.o.undofile = true
 
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-
+vim.o.ignorecase = true
+vim.o.smartcase = true
 
 -- Decrease update time
-vim.opt.updatetime = 250
-
--- Decrease mapped sequence wait time
-vim.o.timeout = true
+vim.o.updatetime = 250
 
 -- 显示按键序列等待时间（过低会导致 <leader>t1 这类组合键经常超时失效）
-vim.opt.timeoutlen = 800
+vim.o.timeout = true
+vim.o.timeoutlen = 800
 
 -- Configure how new splits should be opened
-vim.opt.splitright = true
-vim.opt.splitbelow = true
+vim.o.splitright = true
+vim.o.splitbelow = true
 
 -- Sets how neovim will display certain whitespace characters in the editor.
 --  See `:help 'list'`
 --  and `:help 'listchars'`
-vim.opt.list = true
+vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 -- Preview substitutions live, as you type!
-vim.opt.inccommand = 'split'
+vim.o.inccommand = 'split'
 
 -- Show which line your cursor is on
-vim.opt.cursorline = false
+vim.o.cursorline = false
 
 -- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 5
+vim.o.scrolloff = 5
 
 -- Big file limit
 vim.g.bigfile_size = 1024 * 1024 * 1.5 -- 1.5 MB

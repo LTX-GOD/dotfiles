@@ -1,5 +1,3 @@
-local icons = require 'custom.ui.icons'
-
 return {
   options = {
     theme = 'auto',
@@ -36,12 +34,6 @@ return {
     lualine_x = {
       require('custom.config.indent').indent,
       {
-        name = 'overseer-placeholder',
-        function()
-          return ''
-        end,
-      },
-      {
         require 'minuet.lualine',
       },
       'encoding',
@@ -61,12 +53,7 @@ return {
   extensions = {
     'man',
     'quickfix',
-    'nvim-tree',
     'neo-tree',
-    'toggleterm',
-    'symbols-outline',
-    'aerial',
     'nvim-dap-ui',
-    'mundo',
   },
 }

@@ -1,17 +1,5 @@
 local M = {}
 
---- Check if any LSP client is attached to the current buffer
-M.is_lsp_attached = function()
-  local clients = vim.lsp.get_clients { bufnr = vim.api.nvim_get_current_buf() }
-  return next(clients) ~= nil
-end
-
---- Check if running on macOS
-M.is_mac = function()
-  local uname = vim.uv.os_uname()
-  return uname.sysname == 'Darwin'
-end
-
 --- Jump to file:line detected in any window (useful for log files)
 M.jump_to_file_lnum_from_all_windows = function()
     local matches = {}
@@ -49,22 +37,19 @@ M.jump_to_file_lnum_from_all_windows = function()
         end
     }, function(choice)
         if choice then
-            vim.cmd('edit ' .. choice.file)
-            vim.api.nvim_win_set_cursor(0, {choice.lnum, 0})
+            vim.cmd('edit ' .. vim.fn.fnameescape(choice.file))
+            vim.api.nvim_win_set_cursor(0, { choice.lnum, 0 })
         end
     end)
 end
 
 --- Toggle distraction free mode (hides UI elements)
 M.toggle_distraction_free = function()
-    local feedkeys = vim.api.nvim_feedkeys
-    local t = vim.api.nvim_replace_termcodes
-    -- Assuming these keys toggle various UI elements (gitsigns, inlay hints, diagnostics, etc.)
-    -- Ensure these mappings exist or adapt logic to call functions directly
-    feedkeys(t('<leader>tg', true, true, true), 'm', false) -- Toggle gitsigns
-    feedkeys(t('<leader>th', true, true, true), 'm', false) -- Toggle inlay hints (LSP)
-    feedkeys(t('<leader>td', true, true, true), 'm', false) -- Toggle diagnostics (LSP)
-    -- feedkeys(t('<leader>tt', true, true, true), 'm', false) -- Unknown toggle?
+    pcall(function() require('gitsigns').toggle_signs() end)
+    pcall(function()
+        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = 0 })
+    end)
+    require('custom.lsp.attach').toggle_diagnostics()
 end
 
 return M

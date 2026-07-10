@@ -19,8 +19,8 @@ map({ 'n', 'x' }, 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, desc = 'Move 
 map({ 'n', 'x' }, 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, desc = 'Move cursor up' })
 
 -- 行首行尾快捷键 (Alt+Left/Right)
-map({ 'n', 'i' }, '<A-Left>', '<Esc>^i', { desc = 'Go to start of line' })
-map({ 'n', 'i' }, '<A-Right>', '<Esc>$i', { desc = 'Go to end of line' })
+map({ 'n', 'i' }, '<A-Left>', '<Esc>I', { desc = 'Go to start of line' })
+map({ 'n', 'i' }, '<A-Right>', '<Esc>A', { desc = 'Go to end of line' })
 
 -- =============================================================================
 -- 窗口管理
@@ -34,9 +34,9 @@ map('n', '|', '<CMD>:vsp<CR>', { desc = 'Split window vertically' })
 map('n', '<leader>-', '<C-w>s', { desc = 'Split window horizontally' })
 map('n', '<leader>|', '<C-w>v', { desc = 'Split window vertically' })
 
--- 窗口最大化/恢复
+-- 窗口最大化/恢复（`=` 保留给缩进操作符，如 == / =ap）
 map('n', '+', '<C-w>|<C-w>_', { desc = 'Maximize nvim pane' })
-map('n', '=', '<C-w>=', { desc = 'Restore nvim panes' })
+map('n', '<leader>=', '<C-w>=', { desc = 'Restore nvim panes' })
 map('n', '<C-h>', '<C-w>h', { desc = 'Go to left window' })
 map('n', '<C-j>', '<C-w>j', { desc = 'Go to lower window' })
 map('n', '<C-k>', '<C-w>k', { desc = 'Go to upper window' })
@@ -56,9 +56,9 @@ map("n", "<C-w><C-t>", function()
     vim.api.nvim_set_current_buf(buf)
 end, { desc = "Open current buffer in new tab" })
 
--- 快速滚动
-map('n', '<C-d>', '5j', { desc = 'Scroll down by 5 lines' })
-map('n', '<C-u>', '5k', { desc = 'Scroll up by 5 lines' })
+-- 快速滚动（zz 保持光标居中）
+map('n', '<C-d>', '5jzz', { desc = 'Scroll down by 5 lines' })
+map('n', '<C-u>', '5kzz', { desc = 'Scroll up by 5 lines' })
 
 -- Quickfix 列表
 map('n', ']q', '<cmd>cnext<cr>', { desc = 'Go to next qf item' })
@@ -67,8 +67,8 @@ map('n', '[q', '<cmd>cprev<cr>', { desc = 'Go to prev qf item' })
 -- =============================================================================
 -- 剪贴板与编辑
 -- =============================================================================
--- 粘贴时不替换剪贴板内容
-map('v', 'p', '"_dP', { noremap = true })
+-- 粘贴时不替换剪贴板内容（内置 v_P 不污染寄存器，且无 "_dP 的行尾偏移问题）
+map('v', 'p', 'P', { noremap = true })
 map('v', '<leader>p', 'p', { noremap = true, desc = 'Paste regular' })
 
 -- 代码执行

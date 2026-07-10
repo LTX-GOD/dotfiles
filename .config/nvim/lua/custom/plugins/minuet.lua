@@ -3,7 +3,15 @@ return {
 	event = { 'BufReadPre', 'BufNewFile' },
 	init = function()
 		if not vim.env.DEEPSEEK_API_KEY or vim.env.DEEPSEEK_API_KEY == '' then
-			vim.env.DEEPSEEK_API_KEY = ''
+			local secrets_path = vim.fn.stdpath 'config' .. '/.secrets.lua'
+			if vim.uv.fs_stat(secrets_path) then
+				local ok, t = pcall(dofile, secrets_path)
+				if ok and type(t) == 'table' and t.DEEPSEEK_API_KEY then
+					vim.env.DEEPSEEK_API_KEY = t.DEEPSEEK_API_KEY
+				end
+			else
+				vim.notify('minuet: DEEPSEEK_API_KEY 未设置，请创建 ~/.config/nvim/.secrets.lua', vim.log.levels.WARN)
+			end
 		end
 	end,
 	opts = {

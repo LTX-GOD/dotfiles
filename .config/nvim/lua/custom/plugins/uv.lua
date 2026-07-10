@@ -29,11 +29,20 @@ return {
     require('uv').setup(opts)
 
     vim.api.nvim_create_user_command('UVStatus', function()
-      vim.cmd '!uv --version'
-    end, { desc = '显示uv版本信息' })
+      vim.system({ 'uv', '--version' }, { text = true }, function(out)
+        vim.schedule(function()
+          vim.notify(vim.trim(out.stdout or ''), vim.log.levels.INFO, { title = 'uv' })
+        end)
+      end)
+    end, { desc = '显示 uv 版本' })
 
     vim.api.nvim_create_user_command('UVInfo', function()
-      vim.cmd '!uv info'
-    end, { desc = '显示uv项目信息' })
+      vim.system({ 'uv', 'info' }, { text = true }, function(out)
+        vim.schedule(function()
+          local msg = vim.trim((out.stdout or '') .. (out.stderr or ''))
+          vim.notify(msg, vim.log.levels.INFO, { title = 'uv info' })
+        end)
+      end)
+    end, { desc = '显示 uv 项目信息' })
   end,
 }

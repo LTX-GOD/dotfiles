@@ -1,7 +1,6 @@
 vim.lsp.config.ty = require 'custom.lsp.servers.ty'
-vim.lsp.config.ruff = require 'custom.lsp.servers.ruff'
-
-vim.lsp.enable { 'ty', 'ruff' }
+vim.lsp.enable { 'ty' }
+-- ruff 由 mason-lspconfig 统一管理，勿在此重复启动
 
 -- 设置Python相关的选项
 vim.opt_local.tabstop = 4

@@ -1,6 +1,14 @@
 -- 处理 LSP 附加时的逻辑（Keymaps, UI 等）
 local M = {}
 
+local diag_enabled = true
+
+M.toggle_diagnostics = function()
+    -- 用 enable/disable 开关，不覆盖 vim.diagnostic.config 里的 UI 配置
+    diag_enabled = not diag_enabled
+    vim.diagnostic.enable(diag_enabled)
+end
+
 function M.setup()
     -- 定义 LSP 相关的快捷键
     vim.api.nvim_create_autocmd('LspAttach', {
@@ -53,28 +61,7 @@ function M.setup()
             end, 'Show Diagnostic')
 
             -- 切换诊断显示
-            map('<leader>td', (function()
-                local diag_status = 1 -- 1 显示; 0 隐藏
-                return function()
-                    if diag_status == 1 then
-                        diag_status = 0
-                        vim.diagnostic.config {
-                            underline = false,
-                            virtual_text = false,
-                            signs = false,
-                            update_in_insert = false
-                        }
-                    else
-                        diag_status = 1
-                        vim.diagnostic.config {
-                            underline = true,
-                            virtual_text = true,
-                            signs = true,
-                            update_in_insert = true
-                        }
-                    end
-                end
-            end)(), 'Toggle diagnostics display')
+            map('<leader>td', M.toggle_diagnostics, 'Toggle diagnostics display')
 
             -- 客户端对象
             local client = vim.lsp.get_client_by_id(event.data.client_id)
@@ -129,10 +116,10 @@ function M.setup()
             -- 光标下单词高亮
             if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) and
                 vim.bo.filetype ~= 'bigfile' then
-                local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', {
+                local highlight_augroup = vim.api.nvim_create_augroup('custom-lsp-highlight', {
                     clear = false
                 })
-                local detach_augroup = vim.api.nvim_create_augroup('kickstart-lsp-detach', {
+                local detach_augroup = vim.api.nvim_create_augroup('custom-lsp-detach', {
                     clear = false
                 })
 
@@ -163,7 +150,7 @@ function M.setup()
                     callback = function(event2)
                         vim.lsp.buf.clear_references()
                         vim.api.nvim_clear_autocmds {
-                            group = 'kickstart-lsp-highlight',
+                            group = 'custom-lsp-highlight',
                             buffer = event2.buf
                         }
                     end
@@ -180,16 +167,6 @@ function M.setup()
         HINT = ''
     }
 
-    -- 设置诊断行号高亮组
-    for type, icon in pairs(signs) do
-        local hl = "DiagnosticSign" .. type
-        vim.fn.sign_define(hl, {
-            text = icon,
-            texthl = hl,
-            numhl = hl
-        })
-    end
-
     -- 这里的 Highlight 设置可以保留
     vim.api.nvim_set_hl(0, "DiagnosticLineNrError", {
         fg = vim.api.nvim_get_hl(0, {
@@ -199,7 +176,7 @@ function M.setup()
     })
     vim.api.nvim_set_hl(0, "DiagnosticLineNrWarning", {
         fg = vim.api.nvim_get_hl(0, {
-            name = "DiagnosticWarning"
+            name = "DiagnosticWarn"
         }).fg,
         bold = true
     })

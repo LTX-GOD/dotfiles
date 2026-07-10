@@ -55,11 +55,6 @@ require('snacks').setup {
                 desc = 'Config',
                 action = ':lua Snacks.dashboard.pick("files", {cwd = vim.fn.stdpath("config")})'
             }, {
-                icon = ' ',
-                key = 's',
-                desc = 'Restore Session',
-                section = 'session'
-            }, {
                 icon = '󰒲 ',
                 key = 'p',
                 desc = 'Pack Update',
@@ -161,6 +156,9 @@ require('snacks').setup {
             only_current = true,
             priority = 1000
         }
+    },
+    terminal = {
+        win = { border = 'rounded' },
     },
     statuscolumn = {
         left = { 'mark', 'git' },

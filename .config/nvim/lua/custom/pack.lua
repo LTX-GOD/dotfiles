@@ -13,7 +13,6 @@ local pack_noop_load = function() end
 local main_modules = {
   ['NvChad/nvim-colorizer.lua'] = 'colorizer',
   ['HakonHarnes/img-clip.nvim'] = 'img-clip',
-  ['akinsho/toggleterm.nvim'] = 'toggleterm',
   ['folke/flash.nvim'] = 'flash',
   ['folke/lazydev.nvim'] = 'lazydev',
   ['folke/which-key.nvim'] = 'which-key',
@@ -413,21 +412,8 @@ local function create_event_stub(spec, event_name)
   vim.api.nvim_create_autocmd(event, {
     once = true,
     pattern = pattern,
-    callback = function(ev)
-      if not load_plugin(spec.name) then
-        return
-      end
-
-      if event_name == 'BufWritePre' and spec.name == 'conform.nvim' then
-        local opts = resolve_opts(spec)
-        local format_opts = opts and opts.format_on_save and opts.format_on_save(ev.buf)
-        if format_opts then
-          require('conform').format(vim.tbl_extend('force', {
-            async = false,
-            bufnr = ev.buf,
-          }, format_opts))
-        end
-      end
+    callback = function()
+      load_plugin(spec.name)
     end,
   })
 end

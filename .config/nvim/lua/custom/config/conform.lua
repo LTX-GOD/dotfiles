@@ -29,6 +29,7 @@ return {
     }
   end,
   formatters_by_ft = {
+    java = { 'google-java-format' },
     cpp = { 'clang-format' },
     python = { 'ruff_fix', 'ruff_format' },
     snakemake = snakemake_formatters,
