@@ -1,1 +1,0 @@
-当前 CTF 项目 dont_poison_me 的核心利用链是：伪造 OpenAI-compatible Responses API（SSE），诱导远端 Codex 发起 function_call，再调用 MCP 工具 sandbox_eval；预期终点是利用其 PTY/分页器交互能力（如 less 逃逸）执行 /readflag 读取 flag。 <!-- created=2026-06-14, last=2026-06-14 -->

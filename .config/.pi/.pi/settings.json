@@ -1,8 +1,0 @@
-{
-  "llm-wiki": {
-    "taskModel": {
-      "provider": "deepseek",
-      "id": "deepseek-v4-flash"
-    }
-  }
-}

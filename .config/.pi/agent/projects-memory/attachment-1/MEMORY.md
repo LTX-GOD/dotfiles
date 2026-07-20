@@ -1,1 +1,0 @@
-For the Cuneiform SCTF 2026 crypto attachment, the user clarified that both files are official and should be treated as a consistent challenge input; do not assume attachment mismatch from surprising algebraic behavior without stronger evidence. <!-- created=2026-06-14, last=2026-06-14 -->

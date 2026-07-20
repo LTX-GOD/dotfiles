@@ -1,1 +1,0 @@
-For this SCTF Foundry+Anvil challenge platform, only one remote instance can be active at a time and the RPC URL/port changes per launched instance. Solver scripts should read the RPC URL from an environment variable instead of hardcoding a port. <!-- created=2026-06-14, last=2026-06-14 -->
